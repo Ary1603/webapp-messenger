@@ -1,9 +1,15 @@
+'use client'
 import React from 'react'
 
-function page() {
+import GenericButton from '@/features/components/buttons/GenericButton';
+
+function Page() {
+
   return (
-    <div>page</div>
+    <>
+    <GenericButton url='/api/auth/login'/>
+    </>
   )
 }
 
-export default page
+export default Page
