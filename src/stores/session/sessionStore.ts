@@ -5,7 +5,7 @@ interface SessionState {
     test: string
     isLoading: boolean
     setLoading: (isLoading: boolean) => void
-    testPost: () => ReturnType<typeof ApiRepository.startLogin>
+    testPost: () => ReturnType<typeof ApiRepository.testConection>
 }
 
 export const useSessionStore = create<SessionState>((set) => ({
@@ -18,5 +18,8 @@ export const useSessionStore = create<SessionState>((set) => ({
         
     // }
     setLoading: (isLoading) => set({ isLoading }),
-    testPost: () => ApiRepository.startLogin()
+    testPost: async () => {
+        const response = await ApiRepository.testConection()
+        console.log("Desde la session store: " ,response)
+    }
 }))

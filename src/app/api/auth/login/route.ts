@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request, res: Response) {
-    console.log("Estoy en el POST jeje");
-    return NextResponse.json({ message: "Hola Mundo" }, { status: 200 });
-}
+export async function POST(req: Request) {
+    try {
+      // aquí tu lógica
+      throw new Error("Algo salió mal");
+    } catch (error) {
+      return NextResponse.json(
+        { error: "Error interno del servidor" },
+        { status: 500 }
+      );
+    }
+  }

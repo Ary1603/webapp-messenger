@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import { useSessionStore } from '@/stores/session/sessionStore'
 type GenericButtonProps = { url: string }
@@ -14,9 +15,19 @@ function GenericButton({ url }: GenericButtonProps) {
 //     }
 //   }
 
+  const handleTest = async () => {
+    try {
+      const response = await testPost()
+      console.log("Desde el componente Generic button ",response)
+    } catch (error) {
+      console.log("Entre al catch error en el componente")
+      console.log("Este es el error: ", error)
+    }
+  }
+
   return (
     <div>
-      <button onClick={testPost}>Test</button>
+      <button onClick={handleTest}>Test</button>
     </div>
   )
 }
