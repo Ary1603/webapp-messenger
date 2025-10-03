@@ -3,7 +3,7 @@ import { ApiClient } from "./clients/ApiClient"
 //* APIs
 const TEST = '/api/auth/login'
 
-export default {
+const ApiRepository = {
   async testConection() {
     const response = await ApiClient.post(TEST)
 
@@ -12,6 +12,7 @@ export default {
   }
 }
 
+export default ApiRepository
 // const ApiRepository = {
 //   // Inicia sesión
 //   startLogin: async () => {
