@@ -34,6 +34,8 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<A
     cache,
   });
 
+  console.log("Este es el res", res);
+
   let message = res.statusText;
 
   if (!res.ok) {

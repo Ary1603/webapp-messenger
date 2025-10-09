@@ -37,15 +37,23 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // Allow API routes to pass through without redirecting to pages
+  // if (request.nextUrl.pathname.startsWith('/api')) {
+  //   return supabaseResponse;
+  // }
+
   if (
     !user &&
+    !request.nextUrl.pathname.startsWith('/api') &&
     !request.nextUrl.pathname.startsWith('/login') &&
+    !request.nextUrl.pathname.startsWith('/register') &&
     !request.nextUrl.pathname.startsWith('/auth') &&
     !request.nextUrl.pathname.startsWith('/error')
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone()
     url.pathname = '/login'
+    url.searchParams.set('from', request.nextUrl.pathname)
     return NextResponse.redirect(url)
   }
 

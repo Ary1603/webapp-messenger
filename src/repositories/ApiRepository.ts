@@ -1,15 +1,28 @@
 import { ApiClient } from "./clients/ApiClient"
+/* Types & Schemas */
+import type { SignUp } from "@/schemas/api/auth/signup";
 
 //* APIs
-const TEST = '/api/auth/login'
+const LOGIN = '/api/auth/login'
+const SIGNUP = '/api/auth/register'
 
 const ApiRepository = {
-  async testConection() {
-    const response = await ApiClient.post(TEST)
-
-    console.log("ApiRepository.ts ", response)
+  async initLogin(payload: SignUp) {
+    const response = await ApiClient.post(LOGIN, payload)
     return response.data
-  }
+  },
+  async signUp(payload: SignUp) {
+    console.log("Estoy en el api repository este es el payload: ", payload);
+    const response = await ApiClient.post(SIGNUP, payload)
+    console.log(response);
+    // return response.data
+  },
+  // async testConection() {
+  //   const response = await ApiClient.post(TEST)
+
+  //   console.log("ApiRepository.ts ", response)
+  //   return response.data
+  // }
 }
 
 export default ApiRepository
