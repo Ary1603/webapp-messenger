@@ -6,12 +6,17 @@ import { authErrors } from "./auth";
 
 type Registry = Record<string, ApiError>;
 
+// export function failWithCode(code: keyof typeof AllErrors | string, meta: Partial<MetaBase> = {}) {
+//   const error = getError(code);
+//   return fail(error, meta);
+// }
+
 /** Prefija cada clave con el namespace (p.ej. AUTH.USER_NOT_FOUND) */
 function withNamespace(ns: string, map: ErrorMap): Registry {
   return Object.fromEntries(
     Object.entries(map).map(([k, v]) => [
       `${ns}.${k}`,
-      { messageCode: `${ns}.${k}`, message: v.message, status: v.status },
+      { code: `${ns}.${k}`, messageCode: `${v.messageCode}`, message: v.message, status: v.status },
     ])
   );
 }

@@ -7,12 +7,11 @@ import ApiRepository from "@/repositories/ApiRepository";
 /* Types & Schemas */
 import type { SignUp } from "@/schemas/api/auth/signup";
 interface SessionState {
-    test: string
-    isLoading: boolean
-    setLoading: (isLoading: boolean) => void
-    initLogin: (payload: SignUp) => void
-    signUp: (payload: SignUp) => void
-    // testPost: () => ReturnType<typeof ApiRepository.testConection>
+  test: string
+  isLoading: boolean
+  setLoading: (isLoading: boolean) => void
+  initLogin: (payload: SignUp) => ReturnType<typeof ApiRepository.initLogin>
+  signUp: (payload: SignUp) => ReturnType<typeof ApiRepository.signUp>
 }
 
 export const useSessionStore = create<SessionState>((set) => ({

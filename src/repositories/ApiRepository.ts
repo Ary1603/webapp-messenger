@@ -15,7 +15,7 @@ const ApiRepository = {
     console.log("Estoy en el api repository este es el payload: ", payload);
     const response = await ApiClient.post(SIGNUP, payload)
     console.log(response);
-    // return response.data
+    return response
   },
   // async testConection() {
   //   const response = await ApiClient.post(TEST)

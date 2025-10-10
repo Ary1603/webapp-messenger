@@ -1,16 +1,19 @@
 // app/api/auth/register/route.ts
 import { z } from "zod";
-import { NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { signUpSchema } from "@/schemas/api/auth/signup";
 import { getJSONBody } from "@/utils/parse/getJSONBody";
-import { errorResponse } from "@/utils/error/errorHandler";
+import { successResponse, errorResponse } from "@/utils/api/responderHanlder";
+// Services
+import { signupService } from "@/server/modules/auth/services/register-user.service";
 
 // Reemplaza COMPLETAMENTE tu función POST por ésta:
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
+    console.log("Iniciando el POST");
     const body = await getJSONBody(req)
-    if (body) {
-        return errorResponse("CORE.INVALID_JSON");
+    if (body) return errorResponse("CORE.INVALID_JSON")
+        //xxreturn errorResponse("CORE.INVALID_JSON");
 //         return errorResponse("CORE.INVALID_JSON");
 // return errorResponse("AUTH.UNAUTHORIZED");
 // return errorResponse("PAYMENTS.PROVIDER_UNAVAILABLE", { provider: "Stripe" });
@@ -18,30 +21,36 @@ export async function POST(req: Request) {
     //     { error: "Invalid JSON body" },
     //     { status: 400 }
     //   );
-    }
+    
 
     const parsed = signUpSchema.safeParse(body);
-    if (!parsed.success) {
+    if (!parsed.success) return errorResponse("CORE.INVALID_JSON")
+
       // Opcional: formatear errores de Zod
-      const { formErrors, fieldErrors } = z.flattenError(parsed.error);
-      return NextResponse.json(
-        { error: "Validation failed", formErrors, fieldErrors },
-        { status: 400 }
-      );
-    }
+      //const zodErrors = z.flattenError(parsed.error);
+      //return errorResponse()
+      // return NextResponse.json(
+      //   { error: "Validation failed", formErrors, fieldErrors },
+      //   { status: 400 }
+      // );
+    //}
 
-    console.log("Este es el parsed: ", parsed);
+    console.log("Este es el parsed: ", parsed); 
 
-    const { email, password } = parsed.data;
+    // const { email, password } = parsed.data;
+
+    
 
     // TODO: tu lógica de registro aquí (crear usuario, hashing, etc.)
-    return NextResponse.json(
-      { ok: true, received: parsed.data, email },
-      { status: 200 }
-    );
+    //* Create/register user on webApp (supabase)
+    await signupService(parsed.data)
+    // return NextResponse.json(
+    //   { ok: true, received: parsed.data, email },
+    //   { status: 200 }
+    // );
   } catch (err) {
     console.error("Error en POST /api/auth/register:", err);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    //return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
 

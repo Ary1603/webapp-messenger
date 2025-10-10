@@ -54,4 +54,12 @@
     |- tsconfig.json
 
 
+
+============= Estandares =============
+
+{
+    status: 200,
+    data: {},
+}
+
                 

@@ -1,4 +1,6 @@
-// src/lib/api-client.ts
+// src/repositories/clients/ApiClient.ts
+import { errorHandler, type ApiError } from '@/utils/error/errorHandler'
+
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 interface RequestOptions {
@@ -9,7 +11,7 @@ interface RequestOptions {
   cache?: RequestCache;
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? ""; 
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
 // ⚡ Si usas rutas internas de Next.js (ej: /api/auth/login), puedes dejarlo vacío
 
 // Definimos un tipo genérico de respuesta estándar
@@ -17,6 +19,7 @@ interface ApiResponse<T> {
   data: T;
   status: number;
   message: string;
+  messageCode?: string;
 }
 
 async function request<T>(path: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
@@ -34,22 +37,30 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<A
     cache,
   });
 
-  console.log("Este es el res", res);
-
   let message = res.statusText;
+  let messageCode: string | undefined;
 
   if (!res.ok) {
     try {
       const errorData = await res.json();
+      // console.debug("ApiClient errorData:", errorData);
       message = errorData?.message || errorData?.error || res.statusText;
+      messageCode = errorData?.messageCode;
     } catch {
       message = res.statusText;
     }
-    throw {
+
+    const apiError: ApiError<T> = {
+      messageCode,
       data: null as T,
       status: res.status,
       message,
     };
+
+    //errorHandler(apiError);
+
+    // Re-lanzamos para que el caller pueda romper el flujo si quiere
+    throw apiError;
   }
 
   if (res.status === 204) {
@@ -63,6 +74,7 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<A
   const data = (await res.json()) as T;
 
   return {
+    messageCode,
     data,
     status: res.status,
     message,
