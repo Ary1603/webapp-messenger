@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server/server";
-import type { SignUp } from "@/schemas/api/auth/signup";
+import type { SignUp } from "@/types/api/auth/signup";
 
 // export async function login(formData: FormData) {
 //   const supabase = await createClient()

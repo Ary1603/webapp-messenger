@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server/server'
 /* Repositories */
 import ApiRepository from "@/repositories/ApiRepository";
 /* Types & Schemas */
-import type { SignUp } from "@/schemas/api/auth/signup";
+import type { SignUp } from "@/types/api/auth/signup";
 interface SessionState {
   test: string
   isLoading: boolean

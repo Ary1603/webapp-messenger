@@ -1,5 +1,5 @@
 // src/errors/core.ts
-import { ErrorMap } from "@/schemas/api/api-error";
+import { ErrorMap } from "@/types/api/api-error";
 
 export const coreErrors: ErrorMap = {
   INVALID_JSON: { messageCode: 'CORE-1003', message: "Invalid JSON body", status: 400 },

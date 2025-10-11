@@ -1,18 +1,19 @@
 // app/api/auth/register/route.ts
 import { z } from "zod";
 import { NextRequest } from "next/server";
-import { signUpSchema } from "@/schemas/api/auth/signup";
+import { signUpSchema } from "@/types/api/auth/signup";
 import { getJSONBody } from "@/utils/parse/getJSONBody";
-import { successResponse, errorResponse } from "@/utils/api/responderHanlder";
+//import { successResponse, errorResponse } from "@/utils/api/responderHanlder";
 // Services
 import { signupService } from "@/server/modules/auth/services/register-user.service";
+import { webAppResponder } from "@/utils/api/responderHandler";
 
 // Reemplaza COMPLETAMENTE tu función POST por ésta:
 export async function POST(req: NextRequest) {
   try {
     console.log("Iniciando el POST");
     const body = await getJSONBody(req)
-    if (body) return errorResponse("CORE.INVALID_JSON")
+    if (body) return webAppResponder()//return errorResponse("CORE.INVALID_JSON")
         //xxreturn errorResponse("CORE.INVALID_JSON");
 //         return errorResponse("CORE.INVALID_JSON");
 // return errorResponse("AUTH.UNAUTHORIZED");

@@ -1,5 +1,5 @@
 "use client";
-import { signUpSchema, type SignUp } from "@/schemas/api/auth/signup";
+import { signUpSchema, type SignUp } from "@/types/api/auth/signup";
 import { useRouter } from "next/navigation";
 //import { login, signup } from "./actions"
 import { toast } from "sonner";

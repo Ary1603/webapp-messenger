@@ -1,6 +1,6 @@
 import { ApiClient } from "./clients/ApiClient"
 /* Types & Schemas */
-import type { SignUp } from "@/schemas/api/auth/signup";
+import type { SignUp } from "@/types/api/auth/signup";
 
 //* APIs
 const LOGIN = '/api/auth/login'

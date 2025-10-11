@@ -1,26 +1,13 @@
 // src/repositories/clients/ApiClient.ts
-import { errorHandler, type ApiError } from '@/utils/error/errorHandler'
+import { type ApiError } from '@/utils/error/errorHandler' // TODO: Validar si se puede remplazar por el de Api-response.ts
+import type { RequestOptions } from '@/types/api/api-request';
+import type { ApiResponse, PayloadResponse } from '@/types/api/api-response';
 
-type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-
-interface RequestOptions {
-  method?: HttpMethod;
-  body?: unknown;
-  headers?: HeadersInit;
-  next?: { revalidate?: number | false; tags?: string[] };
-  cache?: RequestCache;
-}
-
+/* Empty string because Next.js internal routes are currently being handled. **/
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
-// ⚡ Si usas rutas internas de Next.js (ej: /api/auth/login), puedes dejarlo vacío
 
 // Definimos un tipo genérico de respuesta estándar
-interface ApiResponse<T> {
-  data: T;
-  status: number;
-  message: string;
-  messageCode?: string;
-}
+
 
 async function request<T>(path: string, options: RequestOptions = {}): Promise<ApiResponse<T>> {
   const { method = "GET", body, headers, next, cache } = options;
@@ -37,10 +24,13 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<A
     cache,
   });
 
+  const ok = res.ok
+  
+
   let message = res.statusText;
   let messageCode: string | undefined;
 
-  if (!res.ok) {
+  if (!ok) {
     try {
       const errorData = await res.json();
       // console.debug("ApiClient errorData:", errorData);
@@ -63,21 +53,27 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<A
     throw apiError;
   }
 
-  if (res.status === 204) {
-    return {
-      data: {} as T,
-      status: res.status,
-      message,
-    };
-  }
+  // if (res.status === 204) {
+  //   return {
+  //     data: {} as T,
+  //     status: res.status,
+  //     message,
+  //   };
+  // }
+
+  //const data = (await res.json()) as T;
+  //console.log("ApiClient data linea 62: ", data);
 
   const data = (await res.json()) as T;
+  console.log("ApiClient linea 68 viendo que trae data: ", data);
 
   return {
-    messageCode,
-    data,
-    status: res.status,
-    message,
+    data: data as PayloadResponse<T>,
+    errors: []
+    //messageCode,
+    //data,
+    // status: res.status,
+    // message,
   };
 }
 
