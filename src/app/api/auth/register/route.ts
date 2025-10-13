@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   try {
     console.log("Iniciando el POST");
     const body = await getJSONBody(req)
-    if (body) return webAppResponder()//return errorResponse("CORE.INVALID_JSON")
+    if (body) return webAppResponder(null, ['CORE_1003'])//return errorResponse("CORE.INVALID_JSON")
         //xxreturn errorResponse("CORE.INVALID_JSON");
 //         return errorResponse("CORE.INVALID_JSON");
 // return errorResponse("AUTH.UNAUTHORIZED");

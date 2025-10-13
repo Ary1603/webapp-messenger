@@ -36,9 +36,10 @@ interface ErrorData {
 }
 
 export interface ApiError {
+  status: number
   code: string;
   messageCode: string;
-  data: ErrorData;
+  data?: ErrorData;
 }
 
 export interface PayloadResponse<T> {
