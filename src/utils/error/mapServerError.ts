@@ -33,7 +33,7 @@ export function getError(code: keyof typeof AllErrors | string): ApiError {
 
   // Transformar CORE-1003 -> CORE.1003
   if (formattedCode.includes("_")) {
-    const [ns, key] = formattedCode.split("_");
+    const [ns] = formattedCode.split("_");
     formattedCode = `${ns}.${code}`;
     console.log("formmattedCode: ", formattedCode);
   }
