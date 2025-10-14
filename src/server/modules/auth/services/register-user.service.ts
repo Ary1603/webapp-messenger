@@ -1,67 +1,39 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-
 import { createClient } from "@/lib/supabase/server/server";
 import type { SignUp } from "@/types/api/auth/signup";
+import { ok, fail, type ApiResponse } from "@/types/api/api-response";
+import type { User, Session, AuthError } from "@supabase/supabase-js";
 
-// export async function login(formData: FormData) {
-//   const supabase = await createClient()
+type SignupData = { user: User | null; session: Session | null };
 
-//   // type-casting here for convenience
-//   // in practice, you should validate your inputs
-//   const data = {
-//     email: formData.get('email') as string,
-//     password: formData.get('password') as string,
-//   }
-
-//   const { error } = await supabase.auth.signInWithPassword(data)
-
-//   if (error) {
-//     redirect('/error')
-//   }
-
-//   revalidatePath('/', 'layout')
-//   redirect('/')
-// }
-
-export async function signupService(payload: SignUp) {
+export async function signupService(
+  payload: SignUp
+): Promise<ApiResponse<SignupData>> {
   try {
-    const { email, password } = payload;
     const supabase = await createClient();
+    const { email, password } = payload;
 
-    const registerPayload = {
-      email: email, //formData.get('email') as string,
-      password: password, //formData.get('password') as string,
-    };
-
-    const { error, data } = await supabase.auth.signUp(registerPayload);
+    const { data, error } = await supabase.auth.signUp({ email, password });
 
     if (error) {
-      console.error("❌ Supabase signup error:", {
-        message: error.message,
-        status: error.status,
-        details: error,
-      });
-
-      // Lanza un error más claro y tipado
-      throw new Error(`Signup failed: ${error.message}`);
+      const status = (error as AuthError).status ?? 500;
+      return fail(
+        status,
+        "AUTH_SIGNUP_FAILED",
+        error.message ?? "Signup failed",
+        { name: error.name, status: (error as AuthError).status }
+      );
     }
 
-    return data
-    console.log("Este es el data del servicio: ", data);
-  } catch (error) {
-    console.log(error)
+    return ok<SignupData>(data);
+  } catch (e) {
+    const message = e instanceof Error ? e.message : "Unexpected error during signup";
+    return fail(
+      500,
+      "AUTH_SIGNUP_UNEXPECTED",
+      message,
+      e
+    );
   }
-
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-
-  // if (error) {
-  //   redirect('/error')
-  // }
-
-  // revalidatePath('/', 'layout')
-  // redirect('/')
 }

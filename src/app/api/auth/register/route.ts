@@ -1,5 +1,4 @@
 // app/api/auth/register/route.ts
-import { z } from "zod";
 import { NextRequest } from "next/server";
 import { signUpSchema } from "@/types/api/auth/signup";
 import { getJSONBody } from "@/utils/parse/getJSONBody";
@@ -11,44 +10,27 @@ import { webAppResponder } from "@/utils/api/responderHandler";
 // Reemplaza COMPLETAMENTE tu función POST por ésta:
 export async function POST(req: NextRequest) {
   try {
-    console.log("Iniciando el POST");
-    const body = await getJSONBody(req)
-    if (body) return webAppResponder(null, ['CORE_1003'])//return errorResponse("CORE.INVALID_JSON")
-        //xxreturn errorResponse("CORE.INVALID_JSON");
-//         return errorResponse("CORE.INVALID_JSON");
-// return errorResponse("AUTH.UNAUTHORIZED");
-// return errorResponse("PAYMENTS.PROVIDER_UNAVAILABLE", { provider: "Stripe" });
-    //   return NextResponse.json(
-    //     { error: "Invalid JSON body" },
-    //     { status: 400 }
-    //   );
-    
+    const body = await getJSONBody(req);
+    if (!body) return webAppResponder(null, ["CORE_1003"]);
 
     const parsed = signUpSchema.safeParse(body);
-    if (!parsed.success) return errorResponse("CORE.INVALID_JSON")
 
-      // Opcional: formatear errores de Zod
-      //const zodErrors = z.flattenError(parsed.error);
-      //return errorResponse()
-      // return NextResponse.json(
-      //   { error: "Validation failed", formErrors, fieldErrors },
-      //   { status: 400 }
-      // );
-    //}
+    if (!parsed.success) {
+      return webAppResponder(null, ["CORE_1003"]);
+    }
 
-    console.log("Este es el parsed: ", parsed); 
+    const response = await signupService(parsed.data);
+    console.log("Este es el response del route.ts: ", response);
 
-    // const { email, password } = parsed.data;
+    if (response.errors.length) {
+      console.log("Estoy en el route.ts: ", response.errors);
+      return webAppResponder(
+        null,
+        response.errors.map(e => e.messageCode || "UNKNOWN_ERROR")
+      );
+    }
 
-    
-
-    // TODO: tu lógica de registro aquí (crear usuario, hashing, etc.)
-    //* Create/register user on webApp (supabase)
-    await signupService(parsed.data)
-    // return NextResponse.json(
-    //   { ok: true, received: parsed.data, email },
-    //   { status: 200 }
-    // );
+    return webAppResponder(response.data);
   } catch (err) {
     console.error("Error en POST /api/auth/register:", err);
     //return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
@@ -69,9 +51,9 @@ export async function POST(req: NextRequest) {
 //   try {
 //     const json = await req.json();
 //     const data = BodySchema.parse(json);     // Validar entrada
-    
+
 //     //const result = await someUseCase(data);  // Llamar caso de uso
-    
+
 //     return NextResponse.json(result, { status: 201 }); // Respuesta OK
 //   } catch (err) {
 //     if (err instanceof z.ZodError) {
@@ -87,9 +69,9 @@ export async function POST(req: NextRequest) {
 //   try {
 //     const { searchParams } = new URL(req.url);
 //     const id = searchParams.get("id");
-    
+
 //     const result = await someUseCase({ id });
-    
+
 //     return NextResponse.json(result, { status: 200 });
 //   } catch (err) {
 //     console.error(err);
