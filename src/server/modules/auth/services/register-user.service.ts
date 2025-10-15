@@ -16,11 +16,17 @@ export async function signupService(
 
     const { data, error } = await supabase.auth.signUp({ email, password });
 
+    console.log("============ DATA ============");
+    console.log(data);
+    console.log("============ Error ============");
+    console.log(error);
     if (error) {
       const status = (error as AuthError).status ?? 500;
+      const errorCode = error.code ? `REGISTER-SUPABASE-${error.code}` :"INTERNAL_ERROR";
+
       return fail(
         status,
-        "AUTH_SIGNUP_FAILED",
+        errorCode,
         error.message ?? "Signup failed",
         { name: error.name, status: (error as AuthError).status }
       );
@@ -36,4 +42,11 @@ export async function signupService(
       e
     );
   }
+}
+
+const registerSupabaseErrors = {
+  over_email_send_rate_limit: "AUTH_1000",
+  unexpected_failure: "",
+  validation_failed: "",
+  bad_json: ""
 }
