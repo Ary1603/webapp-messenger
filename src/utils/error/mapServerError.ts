@@ -28,9 +28,11 @@ export const AllErrors: Registry = {
 };
 
 // (opcional) helper para obtener por clave namespaced
-export function getError(code: keyof typeof AllErrors | string): ApiError {
+export function getError(code: keyof typeof AllErrors | string, error_path?: string): ApiError {
   let formattedCode = String(code);
-
+if( error_path) {
+  formattedCode = `${error_path}.${code}`
+}
   // Transformar CORE-1003 -> CORE.1003
   if (formattedCode.includes("_")) {
     const [ns] = formattedCode.split("_");
