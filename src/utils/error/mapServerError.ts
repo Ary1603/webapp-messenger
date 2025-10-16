@@ -1,5 +1,5 @@
 // src/errors/index.ts
-import type { ApiError, ErrorMap} from "@/types/api/api-error"; 
+import type { ApiError, ErrorMap } from "@/types/api/api-error";
 import { coreErrors } from "@/server/errors/core";
 import { authErrors } from "@/server/errors/auth";
 //import { paymentErrors } from "./payments";
@@ -16,7 +16,12 @@ function withNamespace(ns: string, map: ErrorMap): Registry {
   return Object.fromEntries(
     Object.entries(map).map(([k, v]) => [
       `${ns}.${k}`,
-      { code: `${ns}.${k}`, messageCode: `${v.messageCode}`, message: v.message, status: v.status },
+      {
+        code: `${ns}.${k}`,
+        messageCode: `${v.messageCode}`,
+        message: v.message,
+        status: v.status,
+      },
     ])
   );
 }
@@ -28,16 +33,17 @@ export const AllErrors: Registry = {
 };
 
 // (opcional) helper para obtener por clave namespaced
-export function getError(code: keyof typeof AllErrors | string, error_path?: string): ApiError {
+export function getError(
+  code: keyof typeof AllErrors | string
+): ApiError {
   let formattedCode = String(code);
-if( error_path) {
-  formattedCode = `${error_path}.${code}`
-}
   // Transformar CORE-1003 -> CORE.1003
-  if (formattedCode.includes("_")) {
-    const [ns] = formattedCode.split("_");
-    formattedCode = `${ns}.${code}`;
-    console.log("formmattedCode: ", formattedCode);
+  // Reemplaza solo el primer guion bajo por un punto, preservando el resto
+  const firstUnderscore = formattedCode.indexOf("_");
+  if (firstUnderscore > 0) {
+    const ns = formattedCode.slice(0, firstUnderscore);
+    const key = formattedCode.slice(firstUnderscore + 1); // puede contener más guiones bajos
+    formattedCode = `${ns}.${key}`;
   }
 
   const err = AllErrors[formattedCode];

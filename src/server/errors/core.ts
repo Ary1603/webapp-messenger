@@ -2,8 +2,8 @@
 import { ErrorMap } from "@/types/api/api-error";
 
 export const coreErrors: ErrorMap = {
-  CORE_1000: { messageCode: 'CORE-1000', message: "Invalid JSON body", status: 400 },
-  INVALID_JSON: { messageCode: 'CORE-1003', message: "Invalid JSON body", status: 400 },
-  VALIDATION_FAILED: { messageCode: 'CORE-1004', message: "Validation failed", status: 400 },
-  INTERNAL_ERROR: { messageCode: 'CORE-1005', message: "Internal Server Error", status: 500 },
+  UNKNOWN_ERROR: { messageCode: 'CORE-1000', message: "Unexpected error encountered. No additional details available.", status: 400 },
+  INVALID_JSON: { messageCode: 'CORE-1001', message: "Invalid JSON body", status: 400 },
+  VALIDATION_FAILED: { messageCode: 'CORE-1002', message: "Validation failed", status: 400 },
+  INTERNAL_ERROR: { messageCode: 'CORE-1003', message: "Internal Server Error", status: 500 },
 };

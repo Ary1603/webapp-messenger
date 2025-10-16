@@ -1,4 +1,6 @@
 {
-    "CORE-1001": "This a test of toast error",
-    "CORE-1003": "Test of error of body"
+    "CORE-1000": "An unexpected error occurred. Please try again later.",
+    "CORE-1001": "Incorrect form fields.",
+    "CORE-1003": "Test of error of body",
+    "AUTH-1077": "Email or username already exists"
 }
