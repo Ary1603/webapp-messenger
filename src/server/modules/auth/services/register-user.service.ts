@@ -22,7 +22,7 @@ export async function signupService(
     console.log(error);
     if (error) {
       const status = (error as AuthError).status ?? 500;
-      const errorCode = error.code ? `REGISTER-SUPABASE-${error.code}` :"INTERNAL_ERROR";
+      const errorCode = error.code ? `${error.code}` :"INTERNAL_ERROR";
 
       return fail(
         status,
