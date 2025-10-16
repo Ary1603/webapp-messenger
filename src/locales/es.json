@@ -1,0 +1,10 @@
+{
+    "register_page": {
+        "title": "Registrar usuario",
+        "email": "Correo",
+        "password": "Contraseña"
+    },
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "test": "Este es el test"
+}
