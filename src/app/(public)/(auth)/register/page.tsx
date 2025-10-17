@@ -2,7 +2,7 @@
 import { signUpSchema, type SignUp } from "@/types/api/auth/signup";
 import { useRouter } from "next/navigation";
 //import { login, signup } from "./actions"
-import { toast } from "sonner";
+// import { toast } from "sonner";
 import { useSessionStore } from "@/stores/session/sessionStore";
 import {
   errorHandler,
@@ -12,9 +12,10 @@ import {
 
 import { useI18n } from "@/components/language/LanguageProvider";
 
+// Components
+import PasswordInput from "@/components/inputs/PasswordInput";
 
 export default function LoginPage() {
-  
   // const initLogin = useSessionStore((state) => state.initLogin);
   const setLoading = useSessionStore((state) => state.setLoading);
   const signUp = useSessionStore((state) => state.signUp);
@@ -28,18 +29,18 @@ export default function LoginPage() {
     router.push("/login");
   };
 
-  const handlers = {
-    "error-AUTH-1000": async (error: ApiError) => {
-      // Lógica para cuando hay un error de autenticación
-      console.error("Error AUTH-1000:", error);
-      toast.error("Hubo un problema con la autenticación.");
-    },
-    // "CORE-1003": async (error: ApiError) => {
-    //   // Lógica para errores generales del core
-    //   console.error("Error CORE-1003 juas juas:", error);
-    //   //toast.error("Error interno. Intenta más tarde.");
-    // },
-  };
+  // const handlers = {
+  //   "error-AUTH-1000": async (error: ApiError) => {
+  //     // Lógica para cuando hay un error de autenticación
+  //     console.error("Error AUTH-1000:", error);
+  //     toast.error("Hubo un problema con la autenticación.");
+  //   },
+  //   // "CORE-1003": async (error: ApiError) => {
+  //   //   // Lógica para errores generales del core
+  //   //   console.error("Error CORE-1003 juas juas:", error);
+  //   //   //toast.error("Error interno. Intenta más tarde.");
+  //   // },
+  // };
 
   const handleSignup = async (formData: FormData) => {
     setLoading(true);
@@ -60,7 +61,7 @@ export default function LoginPage() {
       await signUp(payload);
     } catch (error) {
       console.error("Error en signup: ", error);
-      errorHandler(error as ApiError, handlers);
+      errorHandler(error as ApiError);
     } finally {
       setLoading(false);
     }
@@ -89,21 +90,31 @@ export default function LoginPage() {
 
   return (
     <>
-    <h3>{messages.register_page.title}</h3>
-    <button disabled={locale === 'es'} onClick={() => setLocale('es')}>ES</button>
-        <button disabled={locale === 'en'} onClick={() => setLocale('en')}>EN</button>
-    
-    <span>{messages.test}</span>
-    <form>
-      <label htmlFor="email">{messages.register_page.email}</label>
-      <input id="email" name="email" type="email" required />
-      <label htmlFor="password">{messages.register_page.password}</label>
-      <input id="password" name="password" type="password" required />
-      <button type="button" onClick={redirectToLogin}>
-        {messages.login}
+      <h3>{messages.register_page.title}</h3>
+      <button disabled={locale === "es"} onClick={() => setLocale("es")}>
+        ES
       </button>
-      <button formAction={handleSignup}>{messages.register}</button>
-    </form>
+      <button disabled={locale === "en"} onClick={() => setLocale("en")}>
+        EN
+      </button>
+
+      <span>{messages.test}</span>
+      <form>
+        <label htmlFor="email">{messages.register_page.email}</label>
+        <input id="email" name="email" type="email" required />
+        <label htmlFor="password">{messages.register_page.password}</label>
+        <PasswordInput
+          id="password"
+          name="password"
+          placeholder={messages.register_page.password}
+          required
+          autoComplete="new-password"
+        />
+        <button type="button" onClick={redirectToLogin}>
+          {messages.login}
+        </button>
+        <button formAction={handleSignup}>{messages.register}</button>
+      </form>
     </>
   );
 }
