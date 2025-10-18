@@ -1,43 +1,72 @@
-'use client'
+"use client";
+import { useI18n } from "@/components/language/LanguageProvider";
+// Components
+import MessengerButton from "@/components/buttons/MessengerButton";
+import MessengerInput from "@/components/inputs/MessengerInput";
+import PasswordInput from "@/components/inputs/PasswordInput";
 //import { login, signup } from "./actions"
-import { useSessionStore } from '@/stores/session/sessionStore'
-import { useRouter } from 'next/navigation'
+import { useSessionStore } from "@/stores/session/sessionStore";
+import { useRouter } from "next/navigation";
+import ParagraphNLink from "@/components/links/ParagraphNLink";
 
 export default function LoginPage() {
   const initLogin = useSessionStore((state) => state.initLogin);
   const setLoading = useSessionStore((state) => state.setLoading);
-  const router = useRouter();                 
+  const router = useRouter();
+
+  const { messages } = useI18n();
+
+  if (!messages) return null;
 
   const handleLogin = async (formData: FormData) => {
-    setLoading(true)
+    setLoading(true);
     try {
       const payload = {
-        email: formData.get('email') as string,
-        password: formData.get('password') as string
-      }
-      initLogin(payload)
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+      };
+      initLogin(payload);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
-
-    const redirectToSignup = () => {
-    console.log("Entre");
-    router.push('/register')
-  }
-
+  };
 
   return (
     <>
-    <form>
-      <span>Esto es login</span>
-      <label htmlFor="email">Email:</label>
-      <input id="email" name="email" type="email" required />
-      <label htmlFor="password">Password:</label>
-      <input id="password" name="password" type="password" required />
-      <button formAction={handleLogin}>Log in</button>
-      <button onClick={redirectToSignup}>Sign up</button>
-    </form>
+      <form>
+        <MessengerInput
+          id="email"
+          name="email"
+          align="left"
+          label={messages.email}
+          placeholder={messages.email_placeholder}
+        />
+        <PasswordInput
+          id="password"
+          name="password"
+          className="mt-4"
+          align="left"
+          label={messages.password}
+          placeholder={messages.password_placeholder}
+          required
+        />
+        <MessengerButton
+          formAction={handleLogin}
+          label={messages.login}
+          size="md"
+          className="mt-5 w-full"
+        />
+      </form>
+      <div className="mt-8">
+        <ParagraphNLink
+          preText={messages.hasnt_account_link.pre_text}
+          linkText={messages.hasnt_account_link.text_link}
+          href="/register"
+          // targetBlank // <- actívalo si necesitas abrir en otra pestaña
+          className="text-center"
+          linkClassName="ms-1"
+        />
+      </div>
     </>
-  )
+  );
 }

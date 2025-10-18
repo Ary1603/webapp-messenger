@@ -1,10 +1,20 @@
 {
-    "register_page": {
-        "title": "Register",
-        "email": "Email",
-        "password": "Password"
-    },
-    "login": "Login",
-    "register": "Register",
-    "test": "This is the test"
+  "title": "Register",
+  "email": "Email",
+  "email_placeholder": "Enter your email",
+  "password": "Password",
+  "password_placeholder": "Enter your password",
+  "btn_register": "Create account",
+  "has_account_link": {
+    "pre_text": "Already have an account?",
+    "text_link": "Login"
+  },
+  "hasnt_account_link": {
+    "pre_text": "¿Don't have an account?",
+    "text_link": "Signup"
+  },
+  "account_created_success": "Account created",
+  "login": "Login",
+  "register": "Register",
+  "test": "This is the test"
 }

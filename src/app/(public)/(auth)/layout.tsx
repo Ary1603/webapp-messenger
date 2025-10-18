@@ -13,9 +13,8 @@ export default function AuthLayout({
 }) {
   return (
     <div className="bg-blueLightest min-h-dvh flex flex-col items-center justify-center text-center">
-      <header>Barra de navegación</header>
+      <header className='mb-8'>WebApp Messenger</header>
       <main>{children}</main>
-      <footer>© 2025 Mi App</footer>
     </div>
   )
 }

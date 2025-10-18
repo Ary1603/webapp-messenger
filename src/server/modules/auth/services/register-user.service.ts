@@ -1,11 +1,11 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server/server";
-import type { SignUp } from "@/types/api/auth/signup";
+import type { SignUp, SignupData } from "@/types/api/auth/signup";
 import { ok, fail, type ApiResponse } from "@/types/api/api-response";
-import type { User, Session, AuthError } from "@supabase/supabase-js";
+import type { AuthError } from "@supabase/supabase-js";
 
-type SignupData = { user: User | null; session: Session | null };
+
 
 export async function signupService(
   payload: SignUp
