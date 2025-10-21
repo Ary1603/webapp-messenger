@@ -1,18 +1,17 @@
 "use client";
 import { useI18n } from "@/components/language/LanguageProvider";
+// Stores
+import { useSessionStore } from "@/stores/session/sessionStore";
 // Components
 import MessengerButton from "@/components/buttons/MessengerButton";
 import MessengerInput from "@/components/inputs/MessengerInput";
 import PasswordInput from "@/components/inputs/PasswordInput";
-//import { login, signup } from "./actions"
-import { useSessionStore } from "@/stores/session/sessionStore";
-import { useRouter } from "next/navigation";
 import ParagraphNLink from "@/components/links/ParagraphNLink";
+import { errorHandler, type ApiError } from "@/utils/error/errorHandler";
 
 export default function LoginPage() {
   const initLogin = useSessionStore((state) => state.initLogin);
   const setLoading = useSessionStore((state) => state.setLoading);
-  const router = useRouter();
 
   const { messages } = useI18n();
 
@@ -25,9 +24,11 @@ export default function LoginPage() {
         email: formData.get("email") as string,
         password: formData.get("password") as string,
       };
-      initLogin(payload);
+      await initLogin(payload);
     } catch (error) {
-      console.error(error);
+      errorHandler(error as ApiError);
+    } finally {
+      setLoading(false)
     }
   };
 
