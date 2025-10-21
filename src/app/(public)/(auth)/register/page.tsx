@@ -1,48 +1,41 @@
 "use client";
 import { signUpSchema, type SignUp } from "@/types/api/auth/signup";
 import { useRouter } from "next/navigation";
-//import { login, signup } from "./actions"
-import { toast } from "sonner";
 import { useSessionStore } from "@/stores/session/sessionStore";
-import {
-  errorHandler,
-  type ApiError,
-  //type ErrorHandlerFn,
-} from "@/utils/error/errorHandler";
-
+import { errorHandler, type ApiError } from "@/utils/error/errorHandler";
 import { useI18n } from "@/components/language/LanguageProvider";
-
+import MessengerInput from "@/components/inputs/MessengerInput";
+import PasswordInput from "@/components/inputs/PasswordInput";
+import MessengerButton from "@/components/buttons/MessengerButton";
+import ParagraphNLink from "@/components/links/ParagraphNLink";
+import { toast } from "sonner";
+import { useState } from "react";
 
 export default function LoginPage() {
-  
-  // const initLogin = useSessionStore((state) => state.initLogin);
+  // State
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  // Store
+  const isLoading = useSessionStore((state) => state.isLoading);
   const setLoading = useSessionStore((state) => state.setLoading);
   const signUp = useSessionStore((state) => state.signUp);
+
   const router = useRouter();
-
-  const { messages, locale, setLocale } = useI18n();
-
+  const { messages } = useI18n();
   if (!messages) return null;
 
-  const redirectToLogin = () => {
-    router.push("/login");
-  };
-
   const handlers = {
-    "error-AUTH-1000": async (error: ApiError) => {
-      // Lógica para cuando hay un error de autenticación
-      console.error("Error AUTH-1000:", error);
-      toast.error("Hubo un problema con la autenticación.");
+    "AUTH-1077": async () => {
+      router.push("/login");
+      toast.warning(messages.user_aready_exists);
     },
-    // "CORE-1003": async (error: ApiError) => {
-    //   // Lógica para errores generales del core
-    //   console.error("Error CORE-1003 juas juas:", error);
-    //   //toast.error("Error interno. Intenta más tarde.");
-    // },
   };
 
   const handleSignup = async (formData: FormData) => {
     setLoading(true);
+    setEmailError("");
+    setPasswordError("");
+
     try {
       const payload: SignUp = {
         email: formData.get("email") as string,
@@ -50,60 +43,62 @@ export default function LoginPage() {
       };
 
       const result = signUpSchema.safeParse(payload);
-
       if (!result.success) {
-        console.log("Aqui es el error");
-        console.error(result.error.format());
+        const { fieldErrors } = result.error.flatten();
+        setEmailError(fieldErrors.email?.[0] ?? "");
+        setPasswordError(fieldErrors.password?.[0] ?? "");
         return;
       }
-      console.log("Llegue aqui");
+
       await signUp(payload);
+      toast.success(messages.account_created_success);
+      router.push("/login");
     } catch (error) {
-      console.error("Error en signup: ", error);
       errorHandler(error as ApiError, handlers);
     } finally {
       setLoading(false);
     }
   };
 
-  // const handleSignup = async (formData: FormData) => {
-  //   setLoading(true);
-  //   try {
-  //     const payload: SignUp = {
-  //       email: formData.get("email") as string,
-  //       password: formData.get("password") as string,
-  //     };
-  //     const result = signUpSchema.safeParse(payload);
-
-  //     if (!result.success) {
-  //       console.error(result.error.format());
-  //       alert("Datos inválidos. Revisa tu correo o contraseña.");
-  //       setLoading(false);
-  //       return;
-  //     }
-
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   return (
-    <>
-    <h3>{messages.register_page.title}</h3>
-    <button disabled={locale === 'es'} onClick={() => setLocale('es')}>ES</button>
-        <button disabled={locale === 'en'} onClick={() => setLocale('en')}>EN</button>
-    
-    <span>{messages.test}</span>
-    <form>
-      <label htmlFor="email">{messages.register_page.email}</label>
-      <input id="email" name="email" type="email" required />
-      <label htmlFor="password">{messages.register_page.password}</label>
-      <input id="password" name="password" type="password" required />
-      <button type="button" onClick={redirectToLogin}>
-        {messages.login}
-      </button>
-      <button formAction={handleSignup}>{messages.register}</button>
-    </form>
-    </>
+    <div className="w-[330px]">
+      <form>
+        <MessengerInput
+          id="email"
+          name="email"
+          align="left"
+          label={messages.email}
+          errorSpan={emailError}
+          placeholder={messages.email_placeholder}
+        />
+        <PasswordInput
+          id="password"
+          name="password"
+          className="mt-4"
+          align="left"
+          label={messages.password}
+          errorSpan={passwordError}
+          placeholder={messages.password_placeholder}
+          required
+        />
+        <MessengerButton
+          formAction={handleSignup}
+          label={messages.btn_register}
+          disabled={isLoading}
+          size="md"
+          className="mt-5 w-full"
+        />
+      </form>
+
+      <div className="mt-8">
+        <ParagraphNLink
+          preText={messages.has_account_link.pre_text}
+          linkText={messages.has_account_link.text_link}
+          href="/login"
+          className="text-center"
+          linkClassName="ms-1"
+        />
+      </div>
+    </div>
   );
 }

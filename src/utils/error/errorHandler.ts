@@ -130,8 +130,6 @@ export function errorHandler(
 ) {
   const code = error.messageCode;
 
-  console.log("errorHanlder -> code: ", code);
-  console.log(localHandlers);
   if (code && localHandlers?.[code]) {
     localHandlers[code](error);
     return;

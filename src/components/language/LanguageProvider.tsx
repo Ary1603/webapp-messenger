@@ -2,39 +2,69 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { getDictionary, type Messages, type Locale } from "@/lib/i18n";
+import { I18nContextType } from "@/types/i18n";
 
-type I18nContextType = {
-  locale: Locale;
-  messages: Messages | null;
-  setLocale: (l: Locale) => void;
-};
+// --- Configuration & helpers -------------------------------------------------
+const DEFAULT_LOCALE: Locale = "en";
+
+function isValidLocale(value: unknown): value is Locale {
+  return value === "en" || value === "es"; // extend as you add locales
+}
+
+function readSavedLocale(): Locale {
+  if (typeof window === "undefined") return DEFAULT_LOCALE;
+  try {
+    const saved = localStorage.getItem("locale");
+    if (saved && isValidLocale(saved)) return saved;
+  } catch {
+    // ignore storage access errors and fall back to default
+  }
+  return DEFAULT_LOCALE;
+}
+
+// --- Context -----------------------------------------------------------------
 
 const I18nContext = createContext<I18nContextType>({
-  locale: "es",
+  locale: DEFAULT_LOCALE,
   messages: null,
   setLocale: () => {},
 });
 
+// --- Provider ----------------------------------------------------------------
+
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocale] = useState<Locale>("es");
+  // Initialize locale from localStorage synchronously to avoid a flash
+  const [locale, setLocale] = useState<Locale>(() => readSavedLocale());
   const [messages, setMessages] = useState<Messages | null>(null);
 
+  // Load messages whenever the locale changes
   useEffect(() => {
-    getDictionary(locale).then(setMessages);
+    let cancelled = false;
+    setMessages(null);
+    getDictionary(locale)
+      .then((dict) => {
+        if (!cancelled) setMessages(dict);
+      })
+      .catch(() => {
+        // If loading fails, keep messages null so the fallback renders
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [locale]);
 
+  // Persist locale changes
   useEffect(() => {
-    const saved = localStorage.getItem("locale") as Locale | null;
-    if (saved) setLocale(saved);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("locale", locale);
+    try {
+      localStorage.setItem("locale", locale);
+    } catch {
+      // ignore storage write errors
+    }
   }, [locale]);
 
   return (
     <I18nContext.Provider value={{ locale, messages, setLocale }}>
-      {messages ? children : <p>Cargando...</p>}
+      {messages ? children : null}
     </I18nContext.Provider>
   );
 }

@@ -7,20 +7,20 @@ const LOGIN = '/api/auth/login'
 const SIGNUP = '/api/auth/register'
 
 const ApiRepository = {
+  async haseSessionActive() {
+    const response = await ApiClient.get(LOGIN);
+    return response.data;
+  },
   async initLogin(payload: SignUp) {
     const response = await ApiClient.post(LOGIN, payload)
     return response.data
   },
   async signUp(payload: SignUp) {
-    console.log("Estoy en el api repository este es el payload: ", payload);
     const response = await ApiClient.post(SIGNUP, payload)
-    console.log(response);
     return response
   },
   // async testConection() {
   //   const response = await ApiClient.post(TEST)
-
-  //   console.log("ApiRepository.ts ", response)
   //   return response.data
   // }
 }

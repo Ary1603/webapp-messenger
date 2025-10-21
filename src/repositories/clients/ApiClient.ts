@@ -31,7 +31,6 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<A
   let messageCode: string | undefined;
 
   if (!ok) {
-    console.log("ENtre");
     try {
       type ErrorEnvelope = {
         errors?: Array<{ message?: string; messageCode?: string }>;
@@ -40,7 +39,6 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<A
         messageCode?: string;
       };
       const errorData = (await res.json()) as ErrorEnvelope;
-      console.log("ApiClient errorData:", errorData);
 
       // Support error payloads with an `errors` array (may include multiple errors)
       const firstError = Array.isArray(errorData?.errors) && errorData.errors.length > 0
@@ -54,7 +52,6 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<A
       message = res.statusText;
     }
 
-    console.log("res de error: ", res);
     const apiError: ApiError<T> = {
       messageCode,
       data: null as T,
@@ -63,8 +60,6 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<A
     };
 
     //errorHandler(apiError);
-
-    console.log("Linea 52 apiError: ", apiError);
     // Re-lanzamos para que el caller pueda romper el flujo si quiere
     throw apiError;
   }
@@ -78,10 +73,8 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<A
   // }
 
   //const data = (await res.json()) as T;
-  //console.log("ApiClient data linea 62: ", data);
 
   const data = (await res.json()) as T;
-  console.log("ApiClient linea 68 viendo que trae data: ", data);
 
   return {
     data: data as PayloadResponse<T>,

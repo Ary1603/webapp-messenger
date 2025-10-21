@@ -1,10 +1,22 @@
 {
-    "register_page": {
-        "title": "Registrar usuario",
-        "email": "Correo",
-        "password": "Contraseña"
-    },
-    "login": "Iniciar sesión",
-    "register": "Registrarse",
-    "test": "Este es el test"
+  "app_name": "WebApp Messenger",
+  "register_page_title": "Registrar usuario",
+  "email": "Correo",
+  "email_placeholder": "Ingrese su correo",
+  "password": "Contraseña",
+  "password_placeholder": "Ingrese su contraseña",
+  "btn_register": "Crear cuenta",
+  "has_account_link": {
+    "pre_text": "¿Ya tienes una cuenta?",
+    "text_link": "Inicia sesión"
+  },
+  "hasnt_account_link": {
+    "pre_text": "¿No tienes una cuenta?",
+    "text_link": "Registrarse"
+  },
+  "account_created_success": "Cuenta creada con éxito", 
+  "login": "Iniciar sesión",
+  "register": "Registrarse",
+  "user_aready_exists": "Ya existe correo o usuario, intente iniciar sesión.",
+  "test": "Este es el test"
 }

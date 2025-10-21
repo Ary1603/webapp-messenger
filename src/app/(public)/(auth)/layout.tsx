@@ -1,5 +1,6 @@
-// src/app/(protected)/chats/layout.tsx
+// src/app/(public)/(auth)/layout.tsx
 import type { Metadata } from 'next'
+import AuthLayoutClient from './AuthLayoutClient';
 
 export const metadata: Metadata = {
   title: 'Mi App',
@@ -11,10 +12,10 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
     <div className="bg-blueLightest min-h-dvh flex flex-col items-center justify-center text-center">
-      <header>WebApp Messenger desde chats</header>
-      <main>{children}</main>
+      <AuthLayoutClient>{children}</AuthLayoutClient>
     </div>
   )
 }
