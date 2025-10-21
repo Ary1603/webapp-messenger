@@ -2,9 +2,18 @@ import { NextRequest } from "next/server";
 import { signUpSchema } from "@/types/api/auth/signup";
 import { getJSONBody } from "@/utils/parse/getJSONBody";
 // Services
-import { loginService } from "@/server/modules/auth/services/login.service";
+import { loginService, hasSessionActive } from "@/server/modules/auth/services/login.service";
 // Utils - Helpers
 import { webAppResponder } from "@/utils/api/responderHandler";
+
+export async function GET() {
+  try {
+    const response = await hasSessionActive();
+    return webAppResponder(response.data);
+  } catch (error) {
+    console.log("Error en la API Login GET: ", error);
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {

@@ -1,4 +1,5 @@
 {
+  "app_name": "WebApp Messenger",
   "register_page_title": "Registrar usuario",
   "email": "Correo",
   "email_placeholder": "Ingrese su correo",
@@ -16,5 +17,6 @@
   "account_created_success": "Cuenta creada con éxito", 
   "login": "Iniciar sesión",
   "register": "Registrarse",
+  "user_aready_exists": "Ya existe correo o usuario, intente iniciar sesión.",
   "test": "Este es el test"
 }

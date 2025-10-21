@@ -2,7 +2,7 @@ import z from "zod";
 import type { User, Session } from "@supabase/supabase-js";
 
 export const signUpSchema = z.object({
-    email: z.string(),
+    email: z.email(),
     password: z.string().min(6)
 })
 

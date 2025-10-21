@@ -19,12 +19,10 @@ export function webAppResponder<T>(
   payload: PayloadResponse<T> | null,
   errors: (ApiError | string)[] = []
 ) {
-  console.log("Errors Array param: ", errors);
   const resolvedErrors: ApiError[] = errors.map((err) =>
     typeof err === 'string' ? getError(err) : err
   );
 
-  console.log("resolvedErrors (line 22): ", resolvedErrors);
   const hasErrors = resolvedErrors.length > 0;
 
   const meta = {

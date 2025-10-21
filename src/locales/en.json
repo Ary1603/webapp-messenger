@@ -1,4 +1,5 @@
 {
+  "app_name": "WebApp Messenger",
   "title": "Register",
   "email": "Email",
   "email_placeholder": "Enter your email",
@@ -16,5 +17,6 @@
   "account_created_success": "Account created",
   "login": "Login",
   "register": "Register",
+  "user_aready_exists": "Email or username already exists, try to login",
   "test": "This is the test"
 }

@@ -57,6 +57,21 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
+  // Validate if user has an active session
+  // If has an active session redirect to /chats
+  if (
+    user &&
+    (
+      request.nextUrl.pathname === '/login' ||
+      request.nextUrl.pathname === '/register' ||
+      request.nextUrl.pathname === '/'
+    )
+  ) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/chats'
+    return NextResponse.redirect(url)
+  }
+
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
   // If you're creating a new response object with NextResponse.next() make sure to:
   // 1. Pass the request in it, like so:

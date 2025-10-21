@@ -12,6 +12,7 @@ interface SessionState {
   setLoading: (isLoading: boolean) => void
   initLogin: (payload: SignUp) => ReturnType<typeof ApiRepository.initLogin>
   signUp: (payload: SignUp) => ReturnType<typeof ApiRepository.signUp>
+  hasSessionActive: () => ReturnType<typeof ApiRepository.haseSessionActive>
 }
 
 export const useSessionStore = create<SessionState>((set) => ({
@@ -20,19 +21,17 @@ export const useSessionStore = create<SessionState>((set) => ({
     isLoading: false,
 
     // Actions
+    hasSessionActive: async () => {
+        const response = await ApiRepository.haseSessionActive();
+        return response;
+    },
     initLogin: async (payload) => {
         const response = await ApiRepository.initLogin(payload)
         return response
-        // const supabase = await createClient();
-        // await supabase.auth.signUp(payload)
     },
     signUp: async (payload) => {
         const response = await ApiRepository.signUp(payload)
         return response
     },
     setLoading: (isLoading) => set({ isLoading }),
-    // testPost: async () => {
-    //     const response = await ApiRepository.testConection()
-    //     console.log("Desde la session store: " ,response)
-    // }
 }))

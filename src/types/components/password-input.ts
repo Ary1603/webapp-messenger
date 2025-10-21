@@ -7,6 +7,7 @@ export type PasswordInputProps = Omit<
 > & {
   align?: textAlignment;
   label?: string;
+  errorSpan?: string,
   placeholder?: string;
   value?: string;
   defaultValue?: string;

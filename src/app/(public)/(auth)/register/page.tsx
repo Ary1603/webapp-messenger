@@ -1,55 +1,41 @@
 "use client";
 import { signUpSchema, type SignUp } from "@/types/api/auth/signup";
 import { useRouter } from "next/navigation";
-//import { login, signup } from "./actions"
-// import { toast } from "sonner";
 import { useSessionStore } from "@/stores/session/sessionStore";
-import {
-  errorHandler,
-  type ApiError,
-  //type ErrorHandlerFn,
-} from "@/utils/error/errorHandler";
-
+import { errorHandler, type ApiError } from "@/utils/error/errorHandler";
 import { useI18n } from "@/components/language/LanguageProvider";
-
-// Components
 import MessengerInput from "@/components/inputs/MessengerInput";
 import PasswordInput from "@/components/inputs/PasswordInput";
 import MessengerButton from "@/components/buttons/MessengerButton";
 import ParagraphNLink from "@/components/links/ParagraphNLink";
 import { toast } from "sonner";
-
-// const handlers = {
-
-// }
-
-
+import { useState } from "react";
 
 export default function LoginPage() {
-  // const initLogin = useSessionStore((state) => state.initLogin);
+  // State
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  // Store
   const isLoading = useSessionStore((state) => state.isLoading);
   const setLoading = useSessionStore((state) => state.setLoading);
   const signUp = useSessionStore((state) => state.signUp);
+
   const router = useRouter();
-
   const { messages } = useI18n();
-
   if (!messages) return null;
 
-  // const handlers = {
-  //   "error-AUTH-1000": async (error: ApiError) => {
-  //     // Lógica para cuando hay un error de autenticación
-  //     console.error("Error AUTH-1000:", error);
-  //     toast.error("Hubo un problema con la autenticación.");
-  //   },
-  //   // "CORE-1003": async (error: ApiError) => {
-  //   //   // Lógica para errores generales del core
-  //   //   console.error("Error CORE-1003 juas juas:", error);
-  //   //   //toast.error("Error interno. Intenta más tarde.");
-  //   // },
-  // };
-    const handleSignup = async (formData: FormData) => {
+  const handlers = {
+    "AUTH-1077": async () => {
+      router.push("/login");
+      toast.warning(messages.user_aready_exists);
+    },
+  };
+
+  const handleSignup = async (formData: FormData) => {
     setLoading(true);
+    setEmailError("");
+    setPasswordError("");
+
     try {
       const payload: SignUp = {
         email: formData.get("email") as string,
@@ -57,31 +43,32 @@ export default function LoginPage() {
       };
 
       const result = signUpSchema.safeParse(payload);
-
       if (!result.success) {
-        console.error(result.error.format());
+        const { fieldErrors } = result.error.flatten();
+        setEmailError(fieldErrors.email?.[0] ?? "");
+        setPasswordError(fieldErrors.password?.[0] ?? "");
         return;
       }
-      console.log("Llegue aqui");
+
       await signUp(payload);
-      toast.success(messages.account_created_success)
+      toast.success(messages.account_created_success);
       router.push("/login");
     } catch (error) {
-      errorHandler(error as ApiError);
+      errorHandler(error as ApiError, handlers);
     } finally {
       setLoading(false);
     }
   };
 
-
   return (
-    <>
+    <div className="w-[330px]">
       <form>
         <MessengerInput
           id="email"
           name="email"
           align="left"
           label={messages.email}
+          errorSpan={emailError}
           placeholder={messages.email_placeholder}
         />
         <PasswordInput
@@ -90,6 +77,7 @@ export default function LoginPage() {
           className="mt-4"
           align="left"
           label={messages.password}
+          errorSpan={passwordError}
           placeholder={messages.password_placeholder}
           required
         />
@@ -107,11 +95,10 @@ export default function LoginPage() {
           preText={messages.has_account_link.pre_text}
           linkText={messages.has_account_link.text_link}
           href="/login"
-          // targetBlank // <- actívalo si necesitas abrir en otra pestaña
           className="text-center"
           linkClassName="ms-1"
         />
       </div>
-    </>
+    </div>
   );
 }

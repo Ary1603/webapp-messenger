@@ -7,6 +7,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
     {
       label,
       align,
+      errorSpan,
       placeholder,
       value,
       defaultValue,
@@ -83,6 +84,9 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
           >
             <Icon size={18} name={visible ? "eye" : "eye_off"} />
           </button>
+        </div>
+        <div className="text-orange-700 text-left p-0 pl-1 text-sm">
+          <span className="">{errorSpan}</span>
         </div>
       </div>
     );

@@ -7,6 +7,7 @@ const MessengerInput = forwardRef<HTMLInputElement, MessengerInputProps>(
       id,
       value,
       label,
+      errorSpan,
       align,
       placeholder,
       defaultValue,
@@ -58,6 +59,9 @@ const MessengerInput = forwardRef<HTMLInputElement, MessengerInputProps>(
           type="text"
           {...rest}
         />
+        <div className="text-orange-700 text-left p-0 pl-1 text-sm">
+          <span>{ errorSpan }</span>
+        </div>
       </div>
     );
   }

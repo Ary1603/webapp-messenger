@@ -5,8 +5,9 @@ export type MessengerInputProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
   "type"
 > &{
-    align?: textAlignment;
+    align?: textAlignment
     label?: string
+    errorSpan?: string
     placeholder?: string
     value?: string
     defaultValue?: string
