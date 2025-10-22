@@ -1,8 +1,18 @@
 {
   "app_name": "WebApp Messenger",
   "title": "Register",
+    "signup_form_titles": {
+    "user_info": "About you",
+    "credentials": "Login credentials"
+  },
+  "name": "Name",
+  "name_placeholder": "Jhon",
+  "last_name_father": "Father's surname",
+  "last_name_father_placeholder": "Smith",
+  "last_name_mother": "Mother's surname (Optional)",
+  "last_name_mother_placeholder": "Brown",
   "email": "Email",
-  "email_placeholder": "Enter your email",
+  "email_placeholder": "jhon.smith@hotmail.com",
   "password": "Password",
   "password_placeholder": "Enter your password",
   "btn_register": "Create account",
@@ -16,7 +26,9 @@
   },
   "account_created_success": "Account created",
   "login": "Login",
-  "register": "Register",
+  "register": "Signup",
   "user_aready_exists": "Email or username already exists, try to login",
+  "birthday": "Birthday",
+  "date_input": "Select date",
   "test": "This is the test"
 }

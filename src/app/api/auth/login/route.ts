@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { signUpSchema } from "@/types/api/auth/signup";
 import { getJSONBody } from "@/utils/parse/getJSONBody";
 // Services
-import { loginService, hasSessionActive } from "@/server/modules/auth/services/login.service";
+import { loginService, hasSessionActive } from "@/server/modules/services/auth/login.service";
 // Utils - Helpers
 import { webAppResponder } from "@/utils/api/responderHandler";
 

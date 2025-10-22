@@ -1,3 +1,4 @@
+import { CreateUserRequest } from "@/types/api/user/user";
 import { ApiClient } from "./clients/ApiClient"
 /* Types & Schemas */
 import type { SignUp } from "@/types/api/auth/signup";
@@ -15,34 +16,10 @@ const ApiRepository = {
     const response = await ApiClient.post(LOGIN, payload)
     return response.data
   },
-  async signUp(payload: SignUp) {
+  async signUp(payload: CreateUserRequest) {
     const response = await ApiClient.post(SIGNUP, payload)
     return response
-  },
-  // async testConection() {
-  //   const response = await ApiClient.post(TEST)
-  //   return response.data
-  // }
+  }
 }
 
-export default ApiRepository
-// const ApiRepository = {
-//   // Inicia sesión
-//   startLogin: async () => {
-//     const response = await ApiClient.post(TEST)
-
-//     return response.data
-//   },
-
-//   // Cierra sesión
-//   logout: async () => {
-
-//   },
-
-//   // Ejemplo: obtener perfil del usuario
-//   getProfile: async () => {
-
-//   },
-// };
-
-// export default ApiRepository;
+export default ApiRepository;

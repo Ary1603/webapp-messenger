@@ -1,17 +1,16 @@
 /* Zustand */ 
 import { create } from "zustand";
-/* Supabase */
-import { createClient } from '@/lib/supabase/server/server'
 /* Repositories */
 import ApiRepository from "@/repositories/ApiRepository";
 /* Types & Schemas */
+import type { CreateUserRequest } from "@/types/api/user/user";
 import type { SignUp } from "@/types/api/auth/signup";
 interface SessionState {
   test: string
   isLoading: boolean
   setLoading: (isLoading: boolean) => void
   initLogin: (payload: SignUp) => ReturnType<typeof ApiRepository.initLogin>
-  signUp: (payload: SignUp) => ReturnType<typeof ApiRepository.signUp>
+  signUp: (payload: CreateUserRequest) => ReturnType<typeof ApiRepository.signUp>
   hasSessionActive: () => ReturnType<typeof ApiRepository.haseSessionActive>
 }
 
