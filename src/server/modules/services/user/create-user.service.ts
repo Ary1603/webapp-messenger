@@ -1,8 +1,8 @@
 import { createClient } from "@/lib/supabase/server/server";
-import type { User } from "@/types/api/user/user";
+import type { CreateUserPayloadService, createUserServicePayloadSchema } from "@/types/api/user/user";
 //import { ok, fail, type ApiResponse } from "@/types/api/api-response";
 
-export async function createUser(payload: User) {
+export async function createUser(payload: CreateUserPayloadService) {
   try {
     const {
       id,

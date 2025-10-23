@@ -1,4 +1,4 @@
-import z, { email } from "zod";
+import z from "zod";
 
 /**
  * Buenas prácticas:
@@ -8,7 +8,7 @@ import z, { email } from "zod";
 
 // Esquema de usuario tal como lo devuelve el backend (con id obligatorio)
 export const userFromApiSchema = z.object({
-  id: z.number().int().positive(),
+  id: z.string(),
   name: z.string(),
   email: z.email(),
   password: z.string().min(6),
@@ -30,8 +30,15 @@ export const createUserRequestSchema = userFromApiSchema.omit({
   avatar_url: true,
 });
 
+// Esquema para el payload del servicio de createUser 
+export const createUserServicePayloadSchema = userFromApiSchema.omit({
+  email: true,
+  password: true
+})
+
 export const insertUserPayloadSchema = userFromApiSchema.omit({})
 
 // Tipos inferidos
 export type User = z.infer<typeof userFromApiSchema>;
 export type CreateUserRequest = z.infer<typeof createUserRequestSchema>;
+export type CreateUserPayloadService = z.infer<typeof createUserServicePayloadSchema>;

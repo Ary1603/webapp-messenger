@@ -17,7 +17,7 @@ export async function signupService(
   try {
     console.log("Llegue hasta aca");
     const supabase = await createClient();
-    const { email, password, ...userInsertionPayload } = payload;
+    const { email, password, ...rest } = payload;
 
     const { data, error } = await supabase.auth.signUp({ email, password });
 
@@ -33,12 +33,20 @@ export async function signupService(
       );
     }
 
+    const userDataExtracted = {
+      id: data.user!.id,
+      updated_at: data.user!.updated_at as string,
+      avatar_url: null
+    }
 
+    const userInsertionPayload = { ...rest, ...userDataExtracted}
 
+    
     //* User creation
     await createUser(userInsertionPayload);
     //console.clear()
-    console.log("Este es el data del registro: ", data);
+    //console.clear()
+    //console.log("Este es el data del registro: ", data);
     return ok<SignupData>(data);
   } catch (e) {
     const message = e instanceof Error ? e.message : "Unexpected error during signup";

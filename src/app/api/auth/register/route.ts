@@ -13,8 +13,6 @@ export async function POST(req: NextRequest) {
     if (!body) return webAppResponder(null, ["CORE_INVALID_JSON"]);
 
     const parsed = createUserRequestSchema.safeParse(body);
-    console.clear()
-    console.log("Este es el parsed: ", parsed);
 
     if (!parsed.success) {
       return webAppResponder(null, ["CORE_INVALID_JSON"]);
