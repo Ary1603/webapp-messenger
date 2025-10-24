@@ -1,10 +1,12 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server/server";
-import type { SignUp, SignupData } from "@/types/api/auth/signup";
+//import type { SignUp, SignupData } from "@/types/api/auth/signup";
+import type { CreateUserResponseData } from "@/types/api/services/create-user";
 import { ok, fail, type ApiResponse } from "@/types/api/api-response";
 import type { AuthError } from "@supabase/supabase-js";
 import { CreateUserRequest } from "@/types/api/user/user";
+import { logout } from "./logout.service";
 
 // Services
 import { createUser } from "../user/create-user.service";
@@ -13,9 +15,8 @@ import { createUser } from "../user/create-user.service";
 
 export async function signupService(
   payload: CreateUserRequest
-): Promise<ApiResponse<SignupData>> {
+): Promise<ApiResponse<CreateUserResponseData>> {
   try {
-    console.log("Llegue hasta aca");
     const supabase = await createClient();
     const { email, password, ...rest } = payload;
 
@@ -41,13 +42,14 @@ export async function signupService(
 
     const userInsertionPayload = { ...rest, ...userDataExtracted}
 
-    
     //* User creation
-    await createUser(userInsertionPayload);
-    //console.clear()
-    //console.clear()
-    //console.log("Este es el data del registro: ", data);
-    return ok<SignupData>(data);
+    const response = await createUser(userInsertionPayload);
+
+    const { user_created, message } = response.data.data;
+
+    await logout();
+
+    return ok<CreateUserResponseData>({ user_created, message});
   } catch (e) {
     const message = e instanceof Error ? e.message : "Unexpected error during signup";
     return fail(

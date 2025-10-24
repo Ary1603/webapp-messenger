@@ -1,9 +1,18 @@
-import React from 'react'
+"use client"
+import React from "react";
+import ChatsHeader from "@/components/Headers/ChatsHeader";
 
 function chatsPage() {
   return (
-    <div>chatsPage</div>
-  )
+    <div>
+      <ChatsHeader
+        onAddNewChat={() => console.log("Nuevo chat")}
+        onSearchClick={() => console.log("Buscar")}
+        onFilterClick={() => console.log("Filtrar")}
+        // rightExtras={<YourProfileAvatar />}
+      />
+    </div>
+  );
 }
 
-export default chatsPage
+export default chatsPage;

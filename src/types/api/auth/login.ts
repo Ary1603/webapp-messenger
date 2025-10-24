@@ -5,10 +5,10 @@ export type LoginData = { user: User | null; session: Session | null };
 
 export type IsUserLoggedData = { userLogged: boolean };
 
-export const LoginUpSchema = z.object({
+export const LoginSchema = z.object({
     email: z.string(),
     password: z.string().min(6)
 })
 
 
-export type Login = z.infer<typeof LoginUpSchema>
+export type Login = z.infer<typeof LoginSchema>

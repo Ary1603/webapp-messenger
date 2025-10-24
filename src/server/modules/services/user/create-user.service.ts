@@ -1,8 +1,13 @@
 import { createClient } from "@/lib/supabase/server/server";
-import type { CreateUserPayloadService, createUserServicePayloadSchema } from "@/types/api/user/user";
+import type { CreateUserPayloadService } from "@/types/api/user/user";
+import type { CreateUserResponseData } from "@/types/api/services/create-user";
+import { ok, fail, type ApiResponse } from "@/types/api/api-response";
+
 //import { ok, fail, type ApiResponse } from "@/types/api/api-response";
 
-export async function createUser(payload: CreateUserPayloadService) {
+export async function createUser(
+  payload: CreateUserPayloadService
+): Promise<ApiResponse<CreateUserResponseData>> {
   try {
     const {
       id,
@@ -16,7 +21,7 @@ export async function createUser(payload: CreateUserPayloadService) {
 
     const supabase = await createClient();
     const { data, error } = await supabase
-      .from("Users")
+      .from("users")
       .insert([
         {
           id: id,
@@ -30,17 +35,27 @@ export async function createUser(payload: CreateUserPayloadService) {
       ])
       .select();
 
-    console.log(
-      "Este es el data despues de insrtar los datos en la Tabla User: ",
-      data
-    );
     if (error) {
-      console.log(
-        "Estos nos los errores que regreso la inserción de datos en la tabla User: ",
-        error
+      const status = 500;
+      const errorCode = error.code ? `DB_${error.code}` : "INTERNAL_ERROR";
+
+      return fail(
+        status,
+        errorCode,
+        error.message ?? "User row insertion failed"
       );
     }
-  } catch (error) {
-    console.log("Error en la funcion createUser: ", error);
+
+    const response: CreateUserResponseData = {
+      user_created: true,
+      message: "User created successfuly.",
+    };
+
+    return ok<CreateUserResponseData>(response);
+  } catch (e) {
+    console.log("Error en la funcion createUser: ", e);
+    const message =
+      e instanceof Error ? e.message : "Unexpected error during signup";
+    return fail(500, "AUTH_SIGNUP_UNEXPECTED", message, e);
   }
 }

@@ -1,5 +1,5 @@
 "use client";
-import { signUpSchema, type SignUp } from "@/types/api/auth/signup";
+import { signUpSchema } from "@/types/api/auth/signup";
 import { useRouter } from "next/navigation";
 import { useSessionStore } from "@/stores/session/sessionStore";
 import { errorHandler, type ApiError } from "@/utils/error/errorHandler";
@@ -59,8 +59,8 @@ export default function LoginPage() {
       }
 
       await signUp(payload);
-      //toast.success(messages.account_created_success);
-      //router.push("/login");
+      toast.success(messages.account_created_success);
+      router.push("/login");
     } catch (error) {
       errorHandler(error as ApiError, handlers);
     } finally {

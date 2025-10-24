@@ -2,6 +2,7 @@
 import type { ApiError, ErrorMap } from "@/types/api/api-error";
 import { coreErrors } from "@/server/errors/core";
 import { authErrors } from "@/server/errors/auth";
+import { dbErrors } from "@/server/errors/db";
 //import { paymentErrors } from "./payments";
 
 type Registry = Record<string, ApiError>;
@@ -29,6 +30,7 @@ function withNamespace(ns: string, map: ErrorMap): Registry {
 export const AllErrors: Registry = {
   ...withNamespace("CORE", coreErrors),
   ...withNamespace("AUTH", authErrors),
+  ...withNamespace("DB", dbErrors),
   //...withNamespace("PAYMENTS", paymentErrors),
 };
 
