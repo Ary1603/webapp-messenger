@@ -20,7 +20,8 @@ export async function createUser(
     } = payload;
 
     const supabase = await createClient();
-    const { data, error } = await supabase
+    // data
+    const { error } = await supabase
       .from("users")
       .insert([
         {

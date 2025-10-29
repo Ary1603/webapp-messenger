@@ -6,6 +6,7 @@ import type { SignUp } from "@/types/api/auth/signup";
 //* APIs
 const LOGIN = '/api/auth/login'
 const SIGNUP = '/api/auth/register'
+const CHATS = 'api/chats'
 
 const ApiRepository = {
   async haseSessionActive() {
@@ -18,6 +19,10 @@ const ApiRepository = {
   },
   async signUp(payload: CreateUserRequest) {
     const response = await ApiClient.post(SIGNUP, payload)
+    return response
+  },
+  async getInitialChats(userId: string) {
+    const response = await ApiClient.get(`${CHATS}?userId=${userId}`)
     return response
   }
 }

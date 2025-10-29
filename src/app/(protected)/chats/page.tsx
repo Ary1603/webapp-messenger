@@ -1,7 +1,8 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import ChatsHeader from "@/components/Headers/ChatsHeader";
 import ChatCard from "@/components/cards/ChatCard";
+import { useChatsStore } from "@/stores/chats/chatsStore";
 
 const dummy = {
   chats: [
@@ -144,7 +145,22 @@ const dummy = {
 };
 
 function ChatsPage() {
+  const initialChats = useChatsStore((state) => state.getUserChats);
   const ref = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const fetchInitialChat = async () => {
+      try {
+        const response = await initialChats('test-9283-xock-2039');
+        console.log(response);
+      } catch (error) {
+        console.log('Error fetching chats:', error);
+      }
+    };
+
+    fetchInitialChat();
+  }, []);
+
   return (
     <div>
       {/* Header */}
