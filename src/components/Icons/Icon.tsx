@@ -1,41 +1,36 @@
-import * as React from "react";
-import { ICONS } from "@/components/Icons";
-import type { IconProps } from "@/types/components/icon";
+import * as Icons from "lucide-react";
+import { FC } from "react";
+import { LucideIcon as LucideIconType } from "lucide-react";
+import { IconProps } from "@/types/components/icon";
 
-const Icon = React.forwardRef<SVGSVGElement, IconProps>(function Icon(
-  { name, size = 24, width, height, title, className, strokeWidth = 1.5, ...rest },
-  ref
-) {
-  // Los íconos SVG se importan como componentes de React (SVGR).
-  // Forzamos el tipo a un FC con props de SVG para mantener tipado estricto.
-  const Svg = ICONS[name] as React.FC<React.SVGProps<SVGSVGElement>>;
+const DEFAULT_SIZE = 24;
+const DEFAULT_COLOR = "currentColor";
 
-  const computedWidth = size ?? width;
-  const computedHeight = size ?? height;
+const Icon: FC<IconProps> = ({
+  name,
+  size = DEFAULT_SIZE,
+  width,
+  height,
+  color = DEFAULT_COLOR,
+  ...rest
+}) => {
+  const LucideIcon = Icons[name] as LucideIconType;
 
-  // Accesibilidad:
-  // - Si hay `title`, el ícono es "informativo" (role="img") y NO va aria-hidden.
-  // - Si NO hay `title`, se marca como decorativo (aria-hidden) para lectores de pantalla.
-  const ariaHidden = title ? undefined : true;
-  const role = title ? "img" : "presentation";
+  if (!LucideIcon) {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn(`Icon "${name}" no existe en lucide-react`);
+    }
+    return null;
+  }
 
   return (
-    <Svg
-      ref={ref}
-      width={computedWidth}
-      height={computedHeight}
-      className={className}
-      strokeWidth={strokeWidth}
-      aria-hidden={ariaHidden}
-      role={role}
-      focusable="false"
+    <LucideIcon
+      width={width ?? size}
+      height={height ?? size}
+      color={color}
       {...rest}
-    >
-      {title ? <title>{title}</title> : null}
-    </Svg>
+    />
   );
-});
+};
 
-Icon.displayName = "Icon";
-
-export default React.memo(Icon);
+export default Icon;

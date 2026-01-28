@@ -1,0 +1,3 @@
+export type SearchConversationsErrorCode = 
+    | "SEARCH_CONVERSATION_UNEXPECTED_ERROR"
+    | "SEARCH_CONVERSATION_UNATHORIZED"

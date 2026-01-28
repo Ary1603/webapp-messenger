@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { signUpSchema } from "@/types/api/auth/signup";
 import { getJSONBody } from "@/utils/parse/getJSONBody";
 // Services
-import { signupService } from "@/server/modules/services/auth/register-user.service";
+import { signupService } from "@/server/application/auth/register-user.usecase";
 // Utils - Helpers
 import { webAppResponder } from "@/utils/api/responderHandler";
 import { createUserRequestSchema } from "@/types/api/user/user";
@@ -21,14 +21,14 @@ export async function POST(req: NextRequest) {
     //* Call Signup Service
     const response = await signupService(parsed.data);
 
-    if (response.errors.length) {
+    if (response.payload.errors?.length) {
       return webAppResponder(
         null,
-        response.errors.map(e => e.messageCode || "UNKNOWN_ERROR")
+        response.payload.errors.map((e) => e.messageCode || "UNKNOWN_ERROR")
       );
     }
 
-    return webAppResponder(response.data);
+    return webAppResponder(response.payload);
   } catch (err) {
     console.error("Error en POST /api/auth/register:", err);
     //return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

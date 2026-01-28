@@ -5,11 +5,12 @@ import ApiRepository from "@/repositories/ApiRepository";
 /* Types & Schemas */
 import type { CreateUserRequest } from "@/types/api/user/user";
 import type { SignUp } from "@/types/api/auth/signup";
+import type { Chat } from "@/types/domain/chats/chat";
 import { devtools } from "zustand/middleware";
 interface ChatsState {
   isLoading: boolean;
-  chats: [];
-  getUserChats: (userId: string) => Promise<unknown>
+  chats: Chat[];
+  getUserChats: () => Promise<unknown>;
   setLoading: (isLoading: boolean) => void;
   initLogin: (payload: SignUp) => ReturnType<typeof ApiRepository.initLogin>;
   signUp: (
@@ -27,8 +28,14 @@ export const useChatsStore = create<ChatsState>()(
       chats: [],
 
       // Actions
-      getUserChats: async (userId) => {
-        const response = await ApiRepository.getInitialChats(userId);
+      getUserChats: async () => {
+        const response = await ApiRepository.gerUserChats();
+        console.log("Este es el response en el action getUserChats: ", response);
+        // set(
+        //   { chats: response, isLoading: false },
+        //   false,
+        //   "chats/getUserChats:success"
+        // );
         return response;
       },
       hasSessionActive: async () => {

@@ -30,5 +30,11 @@
   "user_aready_exists": "Ya existe correo o usuario, intente iniciar sesión.",
   "birthday": "Fecha de nacimiento",
   "date_input": "Seleccionar fecha",
-  "test": "Este es el test"
+  "test": "Este es el test",
+  "chats_header": {
+    "config_aria_label_btn": "Configuración",
+    "new_chat_aria_label_btn": "Nuevo chat"
+  },
+  "search_input_chats": "Buscar chat",
+  "chat_header": "Messenger"
 }

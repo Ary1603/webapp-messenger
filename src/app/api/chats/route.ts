@@ -1,38 +1,28 @@
-import { NextRequest } from "next/server";
-import { signUpSchema } from "@/types/api/auth/signup";
-import { getJSONBody } from "@/utils/parse/getJSONBody";
-// Services
-import { getUserChats } from "@/server/modules/services/chats/get-chats.service";
-// Utils - Helpers
+/* Utils */
 import { webAppResponder } from "@/utils/api/responderHandler";
-import { createUserRequestSchema } from "@/types/api/user/user";
+/* Use cases */
+import { GetUserChats } from "@/server/application/chats/get-user-chats.usecase";
+import { SupabaseChatsRepository } from "@/server/infrastructure/chats/supabase-chats.repository";
+import { SupabaseAuthRepository } from "@/server/infrastructure/auth/supabase-auth.repository";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    const userId = req.nextUrl.searchParams.get("userId");
-    console.log("API GET Chats userId:", userId);
-    await getUserChats(userId);
-    return "Hola mundo";
+    const authRepository = new SupabaseAuthRepository();
+    const chatsRepository = new SupabaseChatsRepository();
 
-    // const parsed = createUserRequestSchema.safeParse(body);
+    const useCase = new GetUserChats(authRepository, chatsRepository);
 
-    // if (!parsed.success) {
-    //   return webAppResponder(null, ["CORE_INVALID_JSON"]);
-    // }
+    const result = await useCase.execute();
 
-    // //* Call Signup Service
-    // const response = await signupService(parsed.data);
+    if (result.type === "ERROR") {
+      return webAppResponder(null, [result.errorCode]);
+    }
 
-    // if (response.errors.length) {
-    //   return webAppResponder(
-    //     null,
-    //     response.errors.map(e => e.messageCode || "UNKNOWN_ERROR")
-    //   );
-    // }
-
-    // return webAppResponder(response.data);
-  } catch (err) {
-    console.error("Error en POST /api/auth/register:", err);
-    //return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return webAppResponder({
+      data: result.data,
+    });
+  } catch (err: unknown) {
+    console.error("Error on chats petition GET: ", err);
+    return webAppResponder(null, ["CORE_INTERNAL_ERROR"]);
   }
 }

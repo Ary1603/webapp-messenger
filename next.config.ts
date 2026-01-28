@@ -1,5 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig: import('next').NextConfig = {
+    images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "i.pravatar.cc",
+      },
+    ],
+  },
   turbopack: {
     rules: {
       '*.svg': {

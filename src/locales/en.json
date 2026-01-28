@@ -30,5 +30,11 @@
   "user_aready_exists": "Email or username already exists, try to login",
   "birthday": "Birthday",
   "date_input": "Select date",
-  "test": "This is the test"
+  "test": "This is the test",
+    "chats_header": {
+    "config_aria_label_btn": "Configuration",
+    "new_chat_aria_label_btn": "New chat"
+  },
+  "search_input_chats": "Search chat",
+  "chat_header": "Messenger"
 }

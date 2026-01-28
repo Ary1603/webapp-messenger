@@ -1,5 +1,5 @@
 // src/errors/index.ts
-import type { ApiError, ErrorMap } from "@/types/api/api-error";
+import type { ApiError, ErrorMap } from "@/types/transport/http/api-error";
 import { coreErrors } from "@/server/errors/core";
 import { authErrors } from "@/server/errors/auth";
 import { dbErrors } from "@/server/errors/db";
