@@ -1,5 +1,6 @@
 "use client";
 import { useI18n } from "@/components/language/LanguageProvider";
+import { useRouter } from "next/navigation";
 // Stores
 import { useSessionStore } from "@/stores/session/sessionStore";
 // Components
@@ -10,6 +11,8 @@ import ParagraphNLink from "@/components/links/ParagraphNLink";
 import { errorHandler, type ApiError } from "@/utils/error/errorHandler";
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const initLogin = useSessionStore((state) => state.initLogin);
   const setLoading = useSessionStore((state) => state.setLoading);
 
@@ -25,6 +28,7 @@ export default function LoginPage() {
         password: formData.get("password") as string,
       };
       await initLogin(payload);
+      router.push("/chats");
     } catch (error) {
       errorHandler(error as ApiError);
     } finally {

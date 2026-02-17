@@ -3,7 +3,10 @@ import type { MessengerButtonProps } from "@/types/components/messenger-button";
 import type { GeneralSizes } from "@/types/const/general-size";
 
 const MessengerButton = forwardRef<HTMLButtonElement, MessengerButtonProps>(
-  ({ label, size = "md" as GeneralSizes, disabled, className = "", ...props }, ref) => {
+  (
+    { label, size = "md" as GeneralSizes, disabled, className = "", ...props },
+    ref
+  ) => {
     const sizeStyles: Record<GeneralSizes, string> = {
       sm: "px-3 py-2 text-sm",
       md: "px-4 py-2 text-base",
@@ -11,7 +14,7 @@ const MessengerButton = forwardRef<HTMLButtonElement, MessengerButtonProps>(
     };
 
     const baseStyles =
-      "inline-flex items-center justify-center rounded-full font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-200";
+      "inline-flex items-center justify-center rounded-full font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-200 cursor-pointer";
 
     const colorStyles = disabled
       ? "bg-gray-300 text-gray-600 cursor-not-allowed"

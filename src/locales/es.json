@@ -1,8 +1,20 @@
 {
   "app_name": "WebApp Messenger",
   "register_page_title": "Registrar usuario",
+  "signup_form_titles": {
+    "user_info": "Sobre ti",
+    "credentials": "Crea tu acceso"
+  },
+  "username": "Usuario",
+  "username_placeholder": "juanito123",
+  "name": "Nombre",
+  "name_placeholder": "Juan",
+  "last_name_father": "Apellido Paterno",
+  "last_name_father_placeholder": "Perez",
+  "last_name_mother": "Apellido Materno (Opcional)",
+  "last_name_mother_placeholder": "Lopez",
   "email": "Correo",
-  "email_placeholder": "Ingrese su correo",
+  "email_placeholder": "juan.perez@hotmail.com",
   "password": "Contraseña",
   "password_placeholder": "Ingrese su contraseña",
   "btn_register": "Crear cuenta",
@@ -18,5 +30,13 @@
   "login": "Iniciar sesión",
   "register": "Registrarse",
   "user_aready_exists": "Ya existe correo o usuario, intente iniciar sesión.",
-  "test": "Este es el test"
+  "birthday": "Fecha de nacimiento",
+  "date_input": "Seleccionar fecha",
+  "test": "Este es el test",
+  "chats_header": {
+    "config_aria_label_btn": "Configuración",
+    "new_chat_aria_label_btn": "Nuevo chat"
+  },
+  "search_input_chats": "Buscar chat",
+  "chat_header": "Messenger"
 }

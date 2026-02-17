@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import AuthLayoutClient from './AuthLayoutClient';
 
 export const metadata: Metadata = {
-  title: 'Mi App',
+  title: 'Messenger webApp',
   description: 'Ejemplo con Next.js y TypeScript',
 }
 

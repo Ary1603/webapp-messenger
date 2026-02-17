@@ -77,12 +77,12 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
           <button
             type="button"
             onClick={toggleVisibility}
-            className="absolute inset-y-0 right-3 flex items-center justify-center focus:outline-none"
+            className="absolute inset-y-0 right-3 flex items-center justify-center focus:outline-none cursor-pointer"
             aria-label={visible ? "Ocultar contraseña" : "Mostrar contraseña"}
             aria-pressed={visible}
             tabIndex={-1}
           >
-            <Icon size={18} name={visible ? "eye" : "eye_off"} />
+            <Icon size={18} name={visible ? "Eye" : "LucideEyeClosed"} />
           </button>
         </div>
         <div className="text-orange-700 text-left p-0 pl-1 text-sm">

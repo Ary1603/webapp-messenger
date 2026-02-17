@@ -1,13 +1,18 @@
-import type { IconName } from "@/components/Icons";
+import { LucideProps } from "lucide-react";
 
-export type ImgLikeProps = React.ImgHTMLAttributes<HTMLImageElement> & React.AriaAttributes;
+export interface IconProps extends Omit<LucideProps, "size"> {
+  /** Nombre del icono de lucide-react */
+  name: keyof typeof import("lucide-react");
 
-export type IconProps = React.SVGProps<SVGSVGElement> & {
-  name: IconName;
-  size?: number | string;
-  width?: number | string;
-  height?: number | string;
-  title?: string;
-  strokeWidth?: number;
-  className?: string;
-};
+  /** Tamaño general (fallback si no hay width/height) */
+  size?: number;
+
+  /** Ancho específico */
+  width?: number;
+
+  /** Alto específico */
+  height?: number;
+
+  /** Color del icono */
+  color?: string;
+}
