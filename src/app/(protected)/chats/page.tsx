@@ -9,6 +9,7 @@ import { useI18n } from "@/components/language/LanguageProvider";
 import ConversationSearchContent from "@/components/chats/ConversationSearchContent";
 import type { SearchChatItem } from "@/types/components/search-chats-content";
 import { useRouter } from "next/navigation";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 
 // const dummy = {
 //   chats: [
@@ -157,10 +158,12 @@ const chatsMock: SearchChatItem[] = [
 
 function ChatsPage() {
   const [query, setQuery] = useState("");
+  const debouncedQuery = useDebouncedValue(query, 400);
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [isSearching, setIsSearching] = useState(false);
   const initialChats = useChatsStore((state) => state.getUserChats);
   const chats = useChatsStore((state) => state.chats);
+  const searchCoversations = useChatsStore((state) => state.searchConversations);
   const { messages } = useI18n();
   const router = useRouter();
   //const ref = useRef<HTMLButtonElement>(null);
@@ -186,6 +189,16 @@ function ChatsPage() {
 
     fetchInitialChat();
   }, [initialChats, handlers]);
+
+  useEffect(() => {
+    if (!debouncedQuery || debouncedQuery.trim().length < 2) {
+      return;
+    }
+
+    searchCoversations({
+      query: debouncedQuery
+    });
+  }, [debouncedQuery, searchCoversations]);
 
   const handleNewChat = () => {
     alert("Crear nuevo chatxx");

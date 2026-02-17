@@ -6,6 +6,7 @@ export class SearchConversationsUserMapper {
     infraUser: SupabaseSearchUserItem
   ): User {
     return {
+      userId: infraUser.id,
       userName: infraUser.username,
       photoUrl: infraUser.avatarUrl ?? undefined,
     };

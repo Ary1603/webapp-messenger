@@ -1,6 +1,6 @@
 import type { LoginErrorCode } from "../login/login.error-code"
 
-const SUPABASE_LOGIN_ERROR_RESULT_MAP: Record<string, LoginErrorCode> = {
+const USECASE_LOGIN_ERROR_MAP: Record<string, LoginErrorCode> = {
     // Credentials
     invalid_credentials: "AUTH_INVALID_CREDENTIALS",
 
@@ -18,10 +18,10 @@ const SUPABASE_LOGIN_ERROR_RESULT_MAP: Record<string, LoginErrorCode> = {
     over_sms_send_rate_limit: "AUTH_RATE_LIMITED"
 }
 
-export function mapSupabaseLoginError(code?: string): LoginErrorCode {
+export function mapToUsecaseLoginError(code?: string): LoginErrorCode {
   if (!code) return "AUTH_UNEXPECTED_ERROR"
 
   return (
-    SUPABASE_LOGIN_ERROR_RESULT_MAP[code] ?? "AUTH_UNEXPECTED_ERROR"
+    USECASE_LOGIN_ERROR_MAP[code] ?? "AUTH_UNEXPECTED_ERROR"
   );
 }

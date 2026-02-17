@@ -5,6 +5,8 @@
     "user_info": "About you",
     "credentials": "Login credentials"
   },
+  "username": "Username",
+  "username_placeholder": "jhon123",
   "name": "Name",
   "name_placeholder": "Jhon",
   "last_name_father": "Father's surname",

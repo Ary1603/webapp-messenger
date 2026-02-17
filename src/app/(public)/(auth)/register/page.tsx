@@ -1,5 +1,5 @@
 "use client";
-import { signUpSchema } from "@/types/api/auth/signup";
+// import { signUpSchema } from "@/types/api/auth/signup";
 import { useRouter } from "next/navigation";
 import { useSessionStore } from "@/stores/session/sessionStore";
 import { errorHandler, type ApiError } from "@/utils/error/errorHandler";
@@ -11,7 +11,8 @@ import ParagraphNLink from "@/components/links/ParagraphNLink";
 import MessengerCalendar from "@/components/calendars/MessengerCalendar";
 import { toast } from "sonner";
 import { useState } from "react";
-import { CreateUserRequest } from "@/types/api/user/user";
+import { registerSchema } from "@/contracts/auth/register/register.schema";
+// import { CreateUserRequest } from "@/types/api/user/user";
 
 export default function LoginPage() {
   // State
@@ -20,7 +21,8 @@ export default function LoginPage() {
   // Store
   const isLoading = useSessionStore((state) => state.isLoading);
   const setLoading = useSessionStore((state) => state.setLoading);
-  const signUp = useSessionStore((state) => state.signUp);
+  const registerUser = useSessionStore((state) => state.registerUser);
+  const logout = useSessionStore((state) => state.logout);
 
   const router = useRouter();
   const { messages } = useI18n();
@@ -39,9 +41,9 @@ export default function LoginPage() {
     setPasswordError("");
 
     try {
-      const payload: CreateUserRequest = {
+      const payload = {
         name: formData.get("name") as string,
-        username: null,
+        username: formData.get("username") as string,
         last_name_father: formData.get("last_name_father") as string,
         last_name_mother: formData.get("last_name_mother") as string ?? null,
         birthday: formData.get("birthday") as string,
@@ -49,8 +51,8 @@ export default function LoginPage() {
         password: formData.get("password") as string,
       };
 
-      console.log("Este es el payload: ", payload);
-      const result = signUpSchema.safeParse(payload);
+
+      const result = registerSchema.safeParse(payload);
       if (!result.success) {
         const { fieldErrors } = result.error.flatten();
         setEmailError(fieldErrors.email?.[0] ?? "");
@@ -58,7 +60,9 @@ export default function LoginPage() {
         return;
       }
 
-      await signUp(payload);
+      await registerUser(payload);
+      await logout();
+
       toast.success(messages.account_created_success);
       router.push("/login");
     } catch (error) {
@@ -100,6 +104,13 @@ export default function LoginPage() {
               align="left"
               label={messages.last_name_mother}
               placeholder={messages.last_name_mother_placeholder}
+            />
+            <MessengerInput
+              id="username"
+              name="username"
+              align="left"
+              label={messages.username}
+              placeholder={messages.username_placeholder}
             />
             <div className="sm:max-w-sm">
               <MessengerCalendar

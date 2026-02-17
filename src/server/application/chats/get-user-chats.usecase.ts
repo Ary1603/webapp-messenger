@@ -1,7 +1,7 @@
 /* Types */
 import type { ChatsRepository } from "@/server/infrastructure/chats/chats.repository";
 import type { GetUserChatsResult } from "./get-user-chats.result";
-import { AuthRepository } from "@/server/infrastructure/auth/auth.repository";
+import { AuthRepository } from "@/server/application/auth/ports/auth.repository";
 import { mapSupabaseGetUserChatsError } from "../auth/mappers/get-user-chats-error.mapper";
 
 export class GetUserChats {

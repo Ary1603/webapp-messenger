@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import Image from "next/image";
 import type { AvatarProps } from "@/types/components/avatar";
-import { Icon } from "../Icons/Icon";
+import Icon from "../Icons/Icon";
 
 const Avatar = memo(function Avatar({
   src,

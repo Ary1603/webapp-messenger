@@ -3,7 +3,7 @@ import { webAppResponder } from "@/utils/api/responderHandler";
 /* Use cases */
 import { GetUserChats } from "@/server/application/chats/get-user-chats.usecase";
 import { SupabaseChatsRepository } from "@/server/infrastructure/chats/supabase-chats.repository";
-import { SupabaseAuthRepository } from "@/server/infrastructure/auth/supabase-auth.repository";
+import { SupabaseAuthRepository } from "@/server/infrastructure/auth/auth.infra-repository";
 
 export async function GET() {
   try {

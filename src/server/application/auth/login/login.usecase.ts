@@ -1,38 +1,41 @@
 /* Types */
-import type { LoginInput } from "./login.input";
-import type { AuthRepository } from "@/server/infrastructure/auth/auth.repository";
-import type { LoginResult } from "./login.result";
+import type { LoginUsecaseInput } from "./login.input";
+import type { AuthRepository } from "@/server/application/auth/ports/auth.repository";
 
-import { mapSupabaseLoginError } from "../mappers/login-error.mapper";
+import { mapToUsecaseLoginError } from "../mappers/login-error.mapper";
+import { BackendErrorModel } from "../../models/error.model";
+import { UsecaseOutput } from "../../models/usecase-output.model";
 
 export class LoginUseCase {
   constructor(private readonly authRepository: AuthRepository) {}
 
-  async execute(input: LoginInput): Promise<LoginResult> {
+  async execute(
+    input: LoginUsecaseInput,
+  ): Promise<UsecaseOutput<any, BackendErrorModel>> {
     const { email, password } = input;
-    const infraResult = await this.authRepository.login(email, password);
+    const loginResponse = await this.authRepository.login({ email, password });
 
-    if (infraResult.type === "ERROR") {
-      const { type, errorCode } = infraResult;
-
+    if (!loginResponse.success) {
       return {
-        type,
-        errorCode: mapSupabaseLoginError(errorCode),
+        success: false,
+        errors: []
+          errorCode: mapToUsecaseLoginError(loginResponse.data.errorCode),
+        ,
       };
     }
 
     return {
-      type: "SUCCESS",
+      success: true,
       data: {
         user: {
-          id: infraResult.data.user.id,
-          email: infraResult.data.user.email,
-          emailVerified: infraResult.data.user.email_verified,
+          id: loginResponse.data.userId,
+          email: loginResponse.data.email,
+          emailVerified: ""//loginResponse.data.,
         },
         session: {
-          accessToken: infraResult.data.session.access_token,
-          refreshToken: infraResult.data.session.refresh_token,
-          expiresAt: infraResult.data.session.expires_at,
+          accessToken: loginResponse.data.accessToken,
+          refreshToken: "", //infraResult.data.session.refresh_token,
+          expiresAt: "", //infraResult.data.session.expires_at,
         },
         // Business logic example
         // isFirstLogin: false, // lógica de negocio

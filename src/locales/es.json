@@ -5,6 +5,8 @@
     "user_info": "Sobre ti",
     "credentials": "Crea tu acceso"
   },
+  "username": "Usuario",
+  "username_placeholder": "juanito123",
   "name": "Nombre",
   "name_placeholder": "Juan",
   "last_name_father": "Apellido Paterno",

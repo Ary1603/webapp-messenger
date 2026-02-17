@@ -3,21 +3,20 @@ import { create } from "zustand";
 /* Repositories */
 import ApiRepository from "@/repositories/ApiRepository";
 /* Types & Schemas */
-import type { CreateUserRequest } from "@/types/api/user/user";
-import type { SignUp } from "@/types/api/auth/signup";
-import type { User } from "@/types/models/user";
-import type { Session } from "@/types/models/session";
 /* Helpers */
 import { devtools } from "zustand/middleware";
+import { RegisterRequest } from "@/contracts/auth/register/register.request";
+import { LoginRequest } from "@/contracts/auth/login/login.request";
 interface SessionState {
-  user: User | null;
-  session: Session | null;
+  user: {
+    id: string;
+  } | null;
+  session: unknown;
   isLoading: boolean;
   setLoading: (isLoading: boolean) => void;
-  initLogin: (payload: SignUp) => ReturnType<typeof ApiRepository.initLogin>;
-  signUp: (
-    payload: CreateUserRequest
-  ) => ReturnType<typeof ApiRepository.signUp>;
+  logout: () => ReturnType<typeof ApiRepository.logout>;
+  initLogin: (payload: LoginRequest) => ReturnType<typeof ApiRepository.initLogin>;
+  registerUser: (payload: RegisterRequest) => ReturnType<typeof ApiRepository.registerUser>;
   hasSessionActive: () => ReturnType<typeof ApiRepository.haseSessionActive>;
 }
 
@@ -30,6 +29,10 @@ export const useSessionStore = create<SessionState>()(
       session: null,
 
       // Actions
+      logout: async () => {
+        await ApiRepository.logout();
+        return;
+      },
       hasSessionActive: async () => {
         const response = await ApiRepository.haseSessionActive();
         return response;
@@ -43,8 +46,8 @@ export const useSessionStore = create<SessionState>()(
 
         return response;
       },
-      signUp: async (payload) => {
-        const response = await ApiRepository.signUp(payload);
+      registerUser: async (payload) => {
+        const response = await ApiRepository.registerUser(payload);
         return response;
       },
       setLoading: (isLoading) =>

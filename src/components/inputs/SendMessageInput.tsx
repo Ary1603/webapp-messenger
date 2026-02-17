@@ -1,6 +1,6 @@
 import { SendMessageInputProps } from "@/types/components/send-message-input";
 import { memo, useState, FormEvent } from "react";
-import { Icon } from "../Icons/Icon";
+import Icon from "../Icons/Icon";
 
 const SendMessageInput = memo(function SendMessageInput({
   onSend,

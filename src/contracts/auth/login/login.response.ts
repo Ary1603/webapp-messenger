@@ -1,6 +1,5 @@
-export type LoginResponseDTO = 
+export type LoginResponse = 
 {
-  type: "SUCCESS"
   user: {
     id: string;
     email?: string;

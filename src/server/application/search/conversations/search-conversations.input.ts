@@ -1,6 +1,5 @@
-// application/search/search.input.ts
+// application/search/search.input.ts juas juas
 export interface SearchInput {
-  searchType: string;
   query: string;
   pagination?: {
     limit?: number;

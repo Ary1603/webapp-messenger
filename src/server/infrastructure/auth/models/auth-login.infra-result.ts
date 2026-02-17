@@ -8,6 +8,5 @@ export type AuthLoginInfraResult =
     }
   | {
       type: "ERROR";
-      errorCode: string;
-      error?: unknown;
+      description: string;
     };

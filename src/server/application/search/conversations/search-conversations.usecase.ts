@@ -1,8 +1,7 @@
-import { AuthRepository } from "@/server/infrastructure/auth/auth.repository";
+import { AuthRepository } from "@/server/application/auth/ports/auth.repository";
 import { SearchInput } from "./search-conversations.input";
 import { SearchReasult } from "./search-conversations.output";
 import { SearchRepository } from "@/server/infrastructure/search/conversations/search-conversations.repository";
-import { SearchConversationsErrorCode } from "./search-conversations.error-code";
 import { SearchConversationsChatMapper } from "./mappers/search-conversations-chat.mapper";
 import { SearchConversationsUserMapper } from "./mappers/search-conversations-user.mapper";
 

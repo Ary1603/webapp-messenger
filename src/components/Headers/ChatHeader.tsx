@@ -1,6 +1,6 @@
 import type { ChatHeaderProps } from "@/types/components/chat-header";
 import React, { forwardRef } from "react";
-import { Icon } from "../Icons/Icon";
+import Icon from "../Icons/Icon";
 import Avatar from "../avatar/Avatar";
 
 export const ChatHeader = forwardRef<HTMLDivElement, ChatHeaderProps>(
