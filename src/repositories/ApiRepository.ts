@@ -1,48 +1,56 @@
-import { ApiClient } from "./clients/ApiClient"
+//import { CreateUserRequest } from "@/types/api/user/user";
+import { ApiClient } from "./clients/ApiClient";
+import type { SearchConversationsRequest } from "@/contracts/search/conversations/search-conversations.request";
+import type { SearchConversationsResponse } from "@/contracts/search/conversations/search-conversations.response";
+/* Mappers */
+//import { mapChatsDTOToChats } from "@/mappers/chats/chats.mapper";
 /* Types & Schemas */
-import type { SignUp } from "@/types/api/auth/signup";
+import type { RegisterRequest } from "@/contracts/auth/register/register.request";
+// import type { LoginContract } from "@/contracts/auth/login/login.request";
+//import type { SignUp } from "@/types/api/auth/signup";
+import type { ApiResponse } from "@/types/transport/http/api-response";
+import { RegisterResponse } from "@/contracts/auth/register/register.response";
+import { LoginResponse } from "@/contracts/auth/login/login.response";
+import { LoginRequest } from "@/contracts/auth/login/login.request";
+//import type { LoginDataResponse } from "@/types/api/auth/login";
 
 //* APIs
-const LOGIN = '/api/auth/login'
-const SIGNUP = '/api/auth/register'
+const LOGIN = "/api/auth/login";
+const LOGOUT = "/api/auth/logout";
+const REGISTER_USER = "/api/auth/register";
+const CHATS = "/api/chats";
+const SEARCH_CONVERSATIONS = "api/search/conversations";
 
 const ApiRepository = {
-  async initLogin(payload: SignUp) {
-    const response = await ApiClient.post(LOGIN, payload)
-    return response.data
+  async logout(): Promise<void> {
+    await ApiClient.get(LOGOUT);
+    return;
   },
-  async signUp(payload: SignUp) {
-    console.log("Estoy en el api repository este es el payload: ", payload);
-    const response = await ApiClient.post(SIGNUP, payload)
-    console.log(response);
-    return response
+  async haseSessionActive() {
+    const response = await ApiClient.get(LOGIN, { requiresAuth: false });
+    return response.payload;
   },
-  // async testConection() {
-  //   const response = await ApiClient.post(TEST)
+  async initLogin(payload: LoginRequest): Promise<ApiResponse<LoginResponse>> {
+    const response = await ApiClient.post<LoginResponse>(LOGIN, payload);
+    return response;
+  },
+  async registerUser(payload: RegisterRequest): Promise<ApiResponse<RegisterResponse>> {
+    const response = await ApiClient.post<RegisterResponse>(REGISTER_USER, payload);
+    return response;
+  },
+  async gerUserChats() {
+    const response = await ApiClient.get(CHATS);
+    return response;
+  },
+  async searchConversations(
+    payload: SearchConversationsRequest,
+  ): Promise<ApiResponse<SearchConversationsResponse>> {
+    const response = await ApiClient.get<SearchConversationsResponse>(
+      `${SEARCH_CONVERSATIONS}?query=${payload.query}`
+    );
 
-  //   console.log("ApiRepository.ts ", response)
-  //   return response.data
-  // }
-}
+    return response;
+  },
+};
 
-export default ApiRepository
-// const ApiRepository = {
-//   // Inicia sesión
-//   startLogin: async () => {
-//     const response = await ApiClient.post(TEST)
-
-//     return response.data
-//   },
-
-//   // Cierra sesión
-//   logout: async () => {
-
-//   },
-
-//   // Ejemplo: obtener perfil del usuario
-//   getProfile: async () => {
-
-//   },
-// };
-
-// export default ApiRepository;
+export default ApiRepository;

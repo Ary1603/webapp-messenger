@@ -1,35 +1,29 @@
 import { NextRequest } from "next/server";
-import { signUpSchema } from "@/types/api/auth/signup";
 import { getJSONBody } from "@/utils/parse/getJSONBody";
-// Services
-import { signupService } from "@/server/modules/auth/services/register-user.service";
-// Utils - Helpers
+// Usecase
+import { RegisterUserUsecase } from "@/server/application/auth/register/register-user.usecase";
+// Services - Repositories
+import { SupabaseAuthRepository } from "@/server/infrastructure/auth/auth.infra-repository";
+import { SupabaseUserRepository } from "@/server/infrastructure/user/user.repository";
+// Utils
 import { webAppResponder } from "@/utils/api/responderHandler";
 
-export async function POST(req: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
-    const body = await getJSONBody(req);
-    if (!body) return webAppResponder(null, ["CORE_INVALID_JSON"]);
+    const authRepository = new SupabaseAuthRepository();
+    const userRepository = new SupabaseUserRepository();
 
-    const parsed = signUpSchema.safeParse(body);
+    const body = await getJSONBody(request);
+    if(!body) return webAppResponder(null, ["CORE_INVALID_JSON"]);
 
-    if (!parsed.success) {
-      return webAppResponder(null, ["CORE_INVALID_JSON"]);
-    }
+    const usecase = new RegisterUserUsecase(authRepository, userRepository);
 
-    //* Call Signup Service
-    const response = await signupService(parsed.data);
-
-    if (response.errors.length) {
-      return webAppResponder(
-        null,
-        response.errors.map(e => e.messageCode || "UNKNOWN_ERROR")
-      );
-    }
-
-    return webAppResponder(response.data);
-  } catch (err) {
-    console.error("Error en POST /api/auth/register:", err);
-    //return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    const response = await usecase.execute(body);
+    return webAppResponder({
+      data: response
+    })
+  } catch (error) {
+    console.error("Unexpected error on route register user POST: ", error);
+    return webAppResponder(null, ["CORE_INTERNAL_ERROR"]);
   }
 }

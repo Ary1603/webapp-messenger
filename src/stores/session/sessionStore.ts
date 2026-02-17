@@ -1,38 +1,58 @@
-/* Zustand */ 
+/* Zustand */
 import { create } from "zustand";
-/* Supabase */
-import { createClient } from '@/lib/supabase/server/server'
 /* Repositories */
 import ApiRepository from "@/repositories/ApiRepository";
 /* Types & Schemas */
-import type { SignUp } from "@/types/api/auth/signup";
+/* Helpers */
+import { devtools } from "zustand/middleware";
+import { RegisterRequest } from "@/contracts/auth/register/register.request";
+import { LoginRequest } from "@/contracts/auth/login/login.request";
 interface SessionState {
-  test: string
-  isLoading: boolean
-  setLoading: (isLoading: boolean) => void
-  initLogin: (payload: SignUp) => ReturnType<typeof ApiRepository.initLogin>
-  signUp: (payload: SignUp) => ReturnType<typeof ApiRepository.signUp>
+  user: {
+    id: string;
+  } | null;
+  session: unknown;
+  isLoading: boolean;
+  setLoading: (isLoading: boolean) => void;
+  logout: () => ReturnType<typeof ApiRepository.logout>;
+  initLogin: (payload: LoginRequest) => ReturnType<typeof ApiRepository.initLogin>;
+  registerUser: (payload: RegisterRequest) => ReturnType<typeof ApiRepository.registerUser>;
+  hasSessionActive: () => ReturnType<typeof ApiRepository.haseSessionActive>;
 }
 
-export const useSessionStore = create<SessionState>((set) => ({
-    // State
-    test: '',
-    isLoading: false,
+export const useSessionStore = create<SessionState>()(
+  devtools(
+    (set) => ({
+      // State
+      isLoading: false,
+      user: null,
+      session: null,
 
-    // Actions
-    initLogin: async (payload) => {
-        const response = await ApiRepository.initLogin(payload)
-        return response
-        // const supabase = await createClient();
-        // await supabase.auth.signUp(payload)
-    },
-    signUp: async (payload) => {
-        const response = await ApiRepository.signUp(payload)
-        return response
-    },
-    setLoading: (isLoading) => set({ isLoading }),
-    // testPost: async () => {
-    //     const response = await ApiRepository.testConection()
-    //     console.log("Desde la session store: " ,response)
-    // }
-}))
+      // Actions
+      logout: async () => {
+        await ApiRepository.logout();
+        return;
+      },
+      hasSessionActive: async () => {
+        const response = await ApiRepository.haseSessionActive();
+        return response;
+      },
+      initLogin: async (payload) => {
+        const response = await ApiRepository.initLogin(payload);
+        console.log("sessionStore initLogin response: ", response);
+        const { user, session } = response.payload.data;
+
+        set({ user, session }, false, "session/initLogin");
+
+        return response;
+      },
+      registerUser: async (payload) => {
+        const response = await ApiRepository.registerUser(payload);
+        return response;
+      },
+      setLoading: (isLoading) =>
+        set({ isLoading }, false, "session/setLoading"),
+    }),
+    { name: "sessionStore" }
+  )
+);

@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import "./globals.css";
 
 import { LanguageProvider } from "@/components/language/LanguageProvider";
+import { TokenProviderSetup } from "@/components/auth/TokenProviderSetup";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +33,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Toaster richColors position="top-right" />
-        <LanguageProvider>{children}</LanguageProvider>
+        <LanguageProvider>
+          <TokenProviderSetup />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );
