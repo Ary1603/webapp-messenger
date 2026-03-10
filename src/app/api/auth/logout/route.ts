@@ -1,10 +1,10 @@
 import { LogoutUsecase } from "@/server/application/auth/logout/logout.usecase";
-import { SupabaseAuthRepository } from "@/server/infrastructure/auth/auth.infra-repository";
+import { AuthInfraRepository } from "@/server/infrastructure/supabase/repositories/auth.infra-repository";
 import { webAppResponder } from "@/utils/api/responderHandler";
 
 export async function GET() {
   try {
-    const authRepository = new SupabaseAuthRepository();
+    const authRepository = new AuthInfraRepository();
 
     const usecase = new LogoutUsecase(authRepository);
 

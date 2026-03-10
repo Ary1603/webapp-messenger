@@ -1,9 +1,16 @@
-import type { Chat } from "@/types/domain/chats/chat";
-import type { User } from "@/types/domain/chats/user"; 
+interface User {
+  id: string;
+  username: string;
+  full_name: string;
+  avatar_url: string;
+}
 
-export interface SearchConversationsResponse {
-  conversations: {
-    chats: Chat[];
-    users: User[];
-  };
+interface Chat {
+  id: string;
+  name: string;
+  image: string;
+}
+export interface SearchUsersNChatsResponse {
+  users: Array<User>;
+  chats: Array<Chat>;
 }

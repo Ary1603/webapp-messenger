@@ -1,56 +1,47 @@
-import React, {
-  forwardRef,
-  Ref,
-  useMemo,
-} from "react";
+import Image from "next/image";
+import React, { forwardRef, Ref, useMemo } from "react";
 
 type NativeButtonProps = React.ComponentPropsWithoutRef<"button">;
 
 export type ChatCardProps = {
-  /** Título de la conversación o nombre del contacto */
   title: string;
-  /** Último mensaje mostrado debajo del título */
   lastMessage?: string;
-  /** Hora del último mensaje; string (ya formateado) o Date/number para autformato */
   timestamp?: string | Date | number;
-  /** URL de la foto de perfil (se renderiza redonda); si no hay, muestra iniciales */
-  avatarUrl?: string;
-  /** Texto alternativo para la imagen */
+  avatarUrl?: string | null;
   avatarAlt?: string;
-  /** Conteo de mensajes no leídos para badges/aria (opcional) */
   unreadCount?: number;
-  /** Marca la tarjeta como seleccionada (añade aria y estilos) */
   selected?: boolean;
-  /** Locale para formatear hora si timestamp es Date/number (por defecto es-ES) */
   locale?: string;
-  /** Opciones de formateo de hora si deseas personalizar */
   timeFormatOptions?: Intl.DateTimeFormatOptions;
-  /** Permite pasar clases extra desde fuera */
   className?: string;
-  /** Permite sobreescribir estilos inline si es necesario */
   style?: React.CSSProperties;
 } & Omit<NativeButtonProps, "children">;
 
 function formatTimestamp(
   ts: ChatCardProps["timestamp"],
   locale = "es-ES",
-  options: Intl.DateTimeFormatOptions = { hour: "2-digit", minute: "2-digit" }
+  options: Intl.DateTimeFormatOptions = { hour: "2-digit", minute: "2-digit" },
 ): string | undefined {
-  if (ts == null) return undefined;
-  if (typeof ts === "string") return ts;
+  if (!ts) return undefined;
+
   try {
-    const date = typeof ts === "number" ? new Date(ts) : ts;
+    const date = ts instanceof Date ? ts : new Date(ts);
+
     if (Number.isNaN(date.getTime())) return undefined;
+
     return new Intl.DateTimeFormat(locale, options).format(date);
   } catch {
     return undefined;
   }
 }
 
-function getInitials(name: string): string {
+function getInitials(name?: string | null): string {
+  if (!name) return "";
+
   const words = name.trim().split(/\s+/);
   const first = words[0]?.[0] ?? "";
-  const second = words.length > 1 ? words[1][0] ?? "" : "";
+  const second = words.length > 1 ? (words[1]?.[0] ?? "") : "";
+
   return (first + second).toUpperCase();
 }
 
@@ -75,11 +66,11 @@ export const ChatCard = forwardRef(function ChatCard(
     disabled,
     ...buttonProps
   }: ChatCardProps,
-  ref: Ref<HTMLButtonElement>
+  ref: Ref<HTMLButtonElement>,
 ) {
   const timeText = useMemo(
     () => formatTimestamp(timestamp, locale, timeFormatOptions),
-    [timestamp, locale, timeFormatOptions]
+    [timestamp, locale, timeFormatOptions],
   );
 
   const ariaLabel = `${title}${unreadCount ? `, ${unreadCount} sin leer` : ""}${
@@ -93,20 +84,22 @@ export const ChatCard = forwardRef(function ChatCard(
       disabled={disabled}
       aria-label={ariaLabel}
       aria-current={selected ? "true" : undefined}
-      className={
-        [
-          // Base layout
-          "chatcard",
-          // Permite que quien consuma el componente controle estilos con utilidades/CSS
-          "flex items-center gap-3 w-full",
-          "px-3 py-2 rounded-md",
-          // Estados interactivos
-          "text-left transition-shadow",
-          disabled ? "opacity-60 cursor-not-allowed" : "hover:shadow-sm focus:shadow-outline",
-          selected ? "bg-[rgba(0,0,0,0.04)]" : "",
-          className ?? ""
-        ].join(" ").trim()
-      }
+      className={[
+        // Base layout
+        "chatcard",
+        // Permite que quien consuma el componente controle estilos con utilidades/CSS
+        "flex items-center gap-3 w-full",
+        "px-3 py-2 rounded-md",
+        // Estados interactivos
+        "text-left transition-shadow",
+        disabled
+          ? "opacity-60 cursor-not-allowed"
+          : "hover:shadow-sm focus:shadow-outline",
+        selected ? "bg-[rgba(0,0,0,0.04)]" : "",
+        className ?? "",
+      ]
+        .join(" ")
+        .trim()}
       style={style}
       {...buttonProps}
     >
@@ -117,7 +110,7 @@ export const ChatCard = forwardRef(function ChatCard(
         aria-hidden
       >
         {avatarUrl ? (
-          <img
+          <Image
             src={avatarUrl}
             alt={avatarAlt ?? `Avatar de ${title}`}
             style={{
@@ -204,14 +197,15 @@ export const ChatCard = forwardRef(function ChatCard(
       </div>
 
       {/* Derecha: hora */}
-      <div className="shrink-0"
+      <div
+        className="shrink-0"
         style={{
           marginLeft: 8,
           fontSize: 12,
           color: "var(--muted-foreground,#666)",
           lineHeight: 1.2,
           textAlign: "right",
-          minWidth: 52
+          minWidth: 52,
         }}
         aria-hidden={!timeText}
         title={timeText}

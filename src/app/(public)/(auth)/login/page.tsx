@@ -30,6 +30,7 @@ export default function LoginPage() {
       await initLogin(payload);
       router.push("/chats");
     } catch (error) {
+      console.log("Entre al catch -> ", error);
       errorHandler(error as ApiError);
     } finally {
       setLoading(false)

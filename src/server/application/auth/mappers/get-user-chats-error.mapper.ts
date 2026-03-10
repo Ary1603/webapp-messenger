@@ -1,4 +1,4 @@
-import type { GetUserChatsErrorCode } from "../../chats/get-user-chats.error-code";
+import type { GetUserChatsErrorCode } from "../../chats/get-user-chats/get-user-chats.error-code";
 
 const SUPABASE_LOGIN_ERROR_RESULT_MAP: Record<string, GetUserChatsErrorCode> = {
     

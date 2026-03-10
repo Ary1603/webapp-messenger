@@ -16,13 +16,37 @@ const Avatar = memo(function Avatar({
   const avatarWidth = width ?? size;
   const avatarHeight = height ?? size;
 
+  // Generate deterministic color based on alt (so it doesn't change on re-render)
+  const colorVariants = [
+    { bg: "bg-red-100", text: "text-red-700" },
+    { bg: "bg-blue-100", text: "text-blue-700" },
+    { bg: "bg-green-100", text: "text-green-700" },
+    { bg: "bg-yellow-100", text: "text-yellow-700" },
+    { bg: "bg-purple-100", text: "text-purple-700" },
+    { bg: "bg-pink-100", text: "text-pink-700" },
+    { bg: "bg-indigo-100", text: "text-indigo-700" },
+    { bg: "bg-teal-100", text: "text-teal-700" },
+  ];
+
+  const getColorFromString = (value: string) => {
+    let hash = 0;
+    for (let i = 0; i < value.length; i++) {
+      hash = value.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return colorVariants[Math.abs(hash) % colorVariants.length];
+  };
+
+  const fallbackColors = getColorFromString(alt || "U");
+
   return (
     <>
       {/* Avatar button */}
       <button
         type="button"
         onClick={() => src && setIsOpen(true)}
-        className={`relative overflow-hidden rounded-full bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${className}`}
+        className={`relative overflow-hidden rounded-full ${
+          src ? "bg-gray-200" : fallbackColors.bg
+        } focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${className}`}
         style={{ width: avatarWidth, height: avatarHeight }}
         aria-label="Open avatar image"
       >
@@ -35,7 +59,9 @@ const Avatar = memo(function Avatar({
             className="object-cover"
           />
         ) : (
-          <span className="flex h-full w-full items-center justify-center text-sm font-medium text-gray-600">
+          <span
+            className={`flex h-full w-full items-center justify-center text-sm font-semibold ${fallbackColors.text}`}
+          >
             {alt.charAt(0).toUpperCase()}
           </span>
         )}

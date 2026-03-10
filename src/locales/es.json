@@ -38,5 +38,8 @@
     "new_chat_aria_label_btn": "Nuevo chat"
   },
   "search_input_chats": "Buscar chat",
-  "chat_header": "Messenger"
+  "chat_header": "Messenger",
+  "users": "Usuarios",
+  "try_different_search": "No se encontraron resultados. Intenta con una búsqueda diferente.",
+  "send_a_message": "Envia un mensaje..."
 }

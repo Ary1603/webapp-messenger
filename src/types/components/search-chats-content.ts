@@ -1,14 +1,10 @@
-
-
-export type SearchChatItem = {
-  id: string;
-  name: string;
-  photoUrl?: string | null;
-};
-
+import { SearchedUserVM } from "../view-models/user.vm";
 export interface ConversationSearchContentProps {
-    chats: SearchChatItem[];
-    onChatClick: (chatId: string) => void;
+    searchedData: {
+      users: Array<SearchedUserVM>;
+      chats: Array<any>
+    }
+    onChatClick: (chat: SearchedUserVM) => void;
     emptyDescription?: string;
     className?: string;
 }

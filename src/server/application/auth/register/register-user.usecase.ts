@@ -1,9 +1,10 @@
-import { AuthRepository } from "@/server/application/auth/ports/auth.repository";
+import { AuthRepository } from "../../ports/auth.repository";
 import { RegisterUserUsecaseInput } from "./register-user.input";
 import { RegisterUserCredentialsUsecaseOutput } from "./register-user.output";
-import { UserRepository } from "@/server/application/user/ports/user.repository";
+import { UserRepository } from "../../ports/user.repository";
 import { UsecaseOutput } from "../../models/usecase-output.model";
 import { BackendErrorModel } from "../../models/error.model";
+import { mapToUsecaseRegisterUserError } from "./mappers/register-user-error.mapper";
 
 
 export class RegisterUserUsecase {
@@ -16,6 +17,7 @@ export class RegisterUserUsecase {
         
         const { email, password, username, birthday, last_name_father, name, last_name_mother } = payload;
 
+        // Register user credentials
         const responseRegisterUserCredentials = await this.authRepository.registerUserCredentials({
             email,
             password
@@ -25,8 +27,7 @@ export class RegisterUserUsecase {
           return {
             success: false,
             data: {
-              error: responseRegisterUserCredentials.data.error,
-              errorCode: ""
+              errorCode: mapToUsecaseRegisterUserError(responseRegisterUserCredentials.data.errorCode)
             }
           }
         }
