@@ -1,15 +1,20 @@
-import Image from "next/image";
 import React, { memo } from "react";
 import type { ConversationSearchContentProps } from "@/types/components/search-chats-content";
+import Avatar from "../avatar/Avatar";
+import { useI18n } from "../language/LanguageProvider";
 
 const ConversationSearchContent = memo(function ConversationSearchContent({
-  chats,
+  searchedData,
   onChatClick,
-  emptyDescription = "No chats found",
+  emptyDescription,
   className = "",
 }: ConversationSearchContentProps) {
-  // Empty state
-  if (chats.length === 0) {
+  const { messages } = useI18n();
+
+  if (!messages) return null;
+
+  {/* Empty state */}
+  if (!searchedData) {
     return (
       <div
         className={`flex flex-col items-center justify-center gap-3 py-10 text-gray-500 ${className}`}
@@ -28,49 +33,33 @@ const ConversationSearchContent = memo(function ConversationSearchContent({
   }
 
   return (
-    <ul className={`flex flex-col ${className}`} role="list">
-      {chats.map((chat) => (
-        <li key={chat.id}>
-          <button
-            type="button"
-            onClick={() => onChatClick(chat.id)}
-            className="
-              flex w-full items-center gap-3
-              px-3 py-2
-              rounded-lg
-              text-left
-              hover:bg-gray-100
-              focus:outline-none
-              focus-visible:ring-2
-              focus-visible:ring-blue-500
-              transition
-            "
-          >
-            {/* Avatar */}
-            <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gray-200">
-              {chat.photoUrl ? (
-                <Image
-                  width={14}
-                  height={14}
-                  src={chat.photoUrl}
-                  alt={`${chat.name} avatar`}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center text-sm font-medium text-gray-600">
-                  {chat.name.charAt(0).toUpperCase()}
-                </div>
-              )}
-            </div>
+    <div className="px-6 pt-5">
+      <div className="flex items-center justify-between">
+        <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
+          {messages.users}
+        </p>
+      </div>
+      <div className="mt-3 h-px w-full bg-gray-100" />
+      <div className="w-full pt-4">
+        {/* Users section */}
+        <div className="space-y-3">
+          {searchedData.users.map((user) => (
+            <div key={user.id} className="flex items-center gap-3" onClick={() => onChatClick(user)}>
+              {/* Avatar */}
+              <Avatar src={user.avatar_url} alt={user.username} size={40} />
 
-            {/* Chat name */}
-            <span className="truncate text-sm font-medium text-gray-900">
-              {chat.name}
-            </span>
-          </button>
-        </li>
-      ))}
-    </ul>
+              {/* Username / Fullname */}
+              <div className="flex items-center">
+                <p className="text-sm font-medium text-gray-900">
+                  {user.full_name}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <pre>{JSON.stringify(searchedData, null, 2)}</pre>;
+    </div>
   );
 });
 

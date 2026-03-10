@@ -39,7 +39,6 @@ export const useSessionStore = create<SessionState>()(
       },
       initLogin: async (payload) => {
         const response = await ApiRepository.initLogin(payload);
-        console.log("sessionStore initLogin response: ", response);
         const { user, session } = response.payload.data;
 
         set({ user, session }, false, "session/initLogin");

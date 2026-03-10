@@ -53,7 +53,7 @@ const SearchInput = memo(function SearchInput({
       />
 
       {rightIcon && (
-        <div className="absolute right-3 flex items-center text-gray-400 pointer-events-none">
+        <div className="absolute flex items-center text-gray-400 pointer-events-none">
           {rightIcon}
         </div>
       )}

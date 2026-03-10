@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useState } from "react";
 
-function ChatContent({ chat }: ChatContentProps) {
+function ChatContent({ chat, onSendMessage }: ChatContentProps & { onSendMessage?: (message: { body?: string; replyToId?: string | null; metadata?: Record<string, unknown> | null; clientId?: string }) => void }) {
   const router = useRouter();
   const [isChatInfoOpen, setIsChatInfoOpen] = useState(false);
 
@@ -17,7 +17,6 @@ function ChatContent({ chat }: ChatContentProps) {
     setIsChatInfoOpen(true);
   };
 
-  console.log(chat);
   return (
     <>
       <div className="flex h-full flex-col">
@@ -28,8 +27,10 @@ function ChatContent({ chat }: ChatContentProps) {
         <div className="border-t border-gray-200 px-2 pb-3 pt-2">
           <SendMessageInput
             onSend={(message) => {
-              console.log("Sending message:", message);
-              // sendMessage(message)
+              console.log("[ChatContent.tsx] message: ", message);
+              if (onSendMessage) {
+                onSendMessage({ body: message });
+              }
             }}
           />
         </div>

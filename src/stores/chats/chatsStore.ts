@@ -3,24 +3,21 @@ import { create } from "zustand";
 /* Repositories */
 import ApiRepository from "@/repositories/ApiRepository";
 /* Types & Schemas */
-// import type { CreateUserRequest } from "@/types/api/user/user";
-// import type { SignUp } from "@/types/api/auth/signup";
 import type { Chat } from "@/types/domain/chats/chat";
 import { devtools } from "zustand/middleware";
 import { SearchConversationsRequest } from "@/contracts/search/conversations/search-conversations.request";
-import { RegisterRequest } from "@/contracts/auth/register/register.request";
+import { GetInitialMessagesRequest } from "@/contracts/chats/get-initial-messages/get-initial-messages.request";
+import { SendMessageRequest } from "@/contracts/chats/send-message/send-message.request";
 interface ChatsState {
   isLoading: boolean;
-  chats: Chat[];
+  chats: Array<Chat>;
   getUserChats: () => Promise<unknown>;
   setLoading: (isLoading: boolean) => void;
   initLogin: (payload: unknown) => ReturnType<typeof ApiRepository.initLogin>;
-  //registerUser: (payload: RegisterRequest) => ReturnType<typeof ApiRepository.registerUser>;
-  searchConversations: (payload: SearchConversationsRequest) => ReturnType<typeof ApiRepository.searchConversations>;
-  // signUp: (
-  //   payload: CreateUserRequest
-  // ) => ReturnType<unknown>;
-  hasSessionActive: () => ReturnType<typeof ApiRepository.haseSessionActive>;
+  sendMessage: (payload: SendMessageRequest) => ReturnType<typeof ApiRepository.sendMessage>;
+  searchUsersNChats: (payload: SearchConversationsRequest) => ReturnType<typeof ApiRepository.searchUsersNChats>;
+  getInitialChatMessages: (payload: GetInitialMessagesRequest) => ReturnType<typeof ApiRepository.getChatInitialMessages>;
+  getOrCreateDirectChatBetweenUsers: (payload: any) => ReturnType<typeof ApiRepository.getOrCreateDirectChatBetweenUsers>;
 }
 
 export const useChatsStore = create<ChatsState>()(
@@ -34,30 +31,30 @@ export const useChatsStore = create<ChatsState>()(
       // Actions
       getUserChats: async () => {
         const response = await ApiRepository.gerUserChats();
-        console.log("Este es el response en el action getUserChats: ", response);
-        // set(
-        //   { chats: response, isLoading: false },
-        //   false,
-        //   "chats/getUserChats:success"
-        // );
+        const { chats } = response.payload.data
+        set(
+          { chats, isLoading: false },
+          false,
+          "chats/getUserChats:success"
+        );
         return response;
       },
-      hasSessionActive: async () => {
-        const response = await ApiRepository.haseSessionActive();
+      searchUsersNChats: async (payload) => {
+        const response = await ApiRepository.searchUsersNChats(payload);
         return response;
       },
-      initLogin: async (payload) => {
-        const response = await ApiRepository.initLogin(payload);
-        return response;
+      getOrCreateDirectChatBetweenUsers: async (payload) => {
+        const response = await ApiRepository.getOrCreateDirectChatBetweenUsers(payload);
+        return response.data;
       },
-      searchConversations: async (payload) => {
-        const response = await ApiRepository.searchConversations(payload);
-        return response;
+      getInitialChatMessages: async (payload) => {
+        const response = await ApiRepository.getChatInitialMessages(payload);
+        return response.payload.data;
       },
-      // signUp: async (payload) => {
-      //   const response = await ApiRepository.signUp(payload);
-      //   return response;
-      // },
+      sendMessage: async (payload) => {
+        const response = await ApiRepository.sendMessage(payload);
+        return response.payload.data;
+      },
       setLoading: (isLoading) =>
         set({ isLoading }, false, "session/setLoading"),
     }),

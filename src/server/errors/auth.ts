@@ -3,9 +3,7 @@ import { ErrorMap } from "@/types/transport/http/api-error";
 
 export const authErrors: ErrorMap = {
   // Supabase Error codes AUTH
-
   INVALID_CREDENTIALS: { messageCode: "AUTH-1023", message: "Login credentials or grant type not recognized.", status: 400 },
-  
   anonymous_provider_disabled: { messageCode: "AUTH-1000", message: "Anonymous sign-ins are disabled.", status: 400 },
   bad_code_verifier: { messageCode: "AUTH-1001", message: "Returned from the PKCE flow where the provided code verifier does not match the expected one. Indicates a bug in the implementation of the client library.", status: 400 },
   bad_json: { messageCode: "AUTH-1002", message: "Usually used when the HTTP body of the request is not valid JSON.", status: 400 },
@@ -89,4 +87,7 @@ export const authErrors: ErrorMap = {
   user_sso_managed: { messageCode: "AUTH-1080", message: "When a user comes from SSO, certain fields of the user cannot be updated (like email).", status: 400 },
   validation_failed: { messageCode: "AUTH-1081", message: "Provided parameters are not in the expected format.", status: 400 },
   weak_password: { messageCode: "AUTH-1082", message: "User is signing up or changing their password without meeting the password strength criteria. Use the AuthWeakPasswordError class to access more information about what they need to do to make the password pass.", status: 400 },
+
+  // Custom errors webApp Messenger
+  invalid_user_id: { messageCode: "AUTH-1083", message: "Invalid user id.", status: 400},
 };

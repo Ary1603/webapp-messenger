@@ -3,6 +3,5 @@
  */
 
 export interface BackendErrorModel {
-  error?: unknown;
   errorCode: string;
 }

@@ -1,5 +1,4 @@
 import { InputHTMLAttributes } from "react";
-//import type { textAlignment } from "../const/text-alignment";
 
 type CalendarAlignment = 'start' | 'center' | 'end' | undefined;
 

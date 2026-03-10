@@ -1,13 +1,13 @@
 /* Utils */
 import { Search } from "@/server/application/search/conversations/search-conversations.usecase";
-import { SupabaseAuthRepository } from "@/server/infrastructure/auth/auth.infra-repository";
+import { AuthInfraRepository } from "@/server/infrastructure/supabase/repositories/auth.infra-repository";
 import { SupabaseSearch } from "@/server/infrastructure/search/conversations/supabase-search-conversations.repository";
 import { webAppResponder } from "@/utils/api/responderHandler";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    const authRepository = new SupabaseAuthRepository();
+    const authRepository = new AuthInfraRepository();
     const searchRepository = new SupabaseSearch();
 
     const searchParams = request.nextUrl.searchParams;
