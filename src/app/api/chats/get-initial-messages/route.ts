@@ -12,10 +12,6 @@ export async function POST(request: NextRequest) {
 
     const body = await getJSONBody(request);
 
-    console.log("[POST][GET-INITIAL-MESSAGES] body: ", body);
-
-    //if (!body) return webAppResponder(null, ["CORE_INVALID_JSON"]);
-
     const useCase = new GetChatInitialMessagesUsecase(chatsRepository);
 
     const usecaseResponse = await useCase.execute(body);
@@ -23,7 +19,6 @@ export async function POST(request: NextRequest) {
     if (!usecaseResponse.success) {
       const errors = [];
       errors.push(usecaseResponse.data.errorCode);
-      console.log("[[POST][GET-INITIAL-MESSAGES] return errors", errors);
       return webAppResponder(null, errors);
     }
 

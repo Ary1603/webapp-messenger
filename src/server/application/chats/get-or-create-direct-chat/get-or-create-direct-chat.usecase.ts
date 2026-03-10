@@ -26,9 +26,7 @@ export class GetOrCreateDirectChatUsecase {
             }
         }
 
-        console.log("[GetOrCreateDirectChatUsecase] getDirectChatWithUserResponse: ", getDirectChatWithUserResponse.data);
         if(getDirectChatWithUserResponse.data.length > 0) {
-            console.log("Entre al if");
             return {
                 success: true,
                 data: getDirectChatWithUserResponse.data
@@ -39,9 +37,6 @@ export class GetOrCreateDirectChatUsecase {
 
 
         const createDirectChatResponse = await this.chatRepository.createDirectChatWitUser({userB: input.userB_id});
-
-        console.log("[GetOrCreateDirectChatUsecase] createDirectChatResponse: ", createDirectChatResponse);
-        
 
         return {
             success: true,

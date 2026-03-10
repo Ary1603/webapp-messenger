@@ -1,12 +1,8 @@
-// src/repositories/clients/ApiClient.ts
-import { type ApiError } from "@/utils/error/errorHandler"; // TODO: Validar si se puede remplazar por el de Api-response.ts
+import { type ApiError } from "@/utils/error/errorHandler";
 import type { RequestOptions } from "@/types/transport/http/api-request";
 import type { ApiResponse } from "@/types/transport/http/api-response";
 
-/* Empty string because Next.js internal routes are currently being handled. **/
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
-
-// Definimos un tipo genérico de respuesta estándar
 
 async function request<T>(
   path: string,
@@ -27,16 +23,10 @@ async function request<T>(
   });
 
   const ok = res.ok;
-
-  console.log(
-    "Running on:",
-    typeof window === "undefined" ? "SERVER" : "CLIENT"
-  );
   let message = res.statusText;
   let messageCode: string | undefined;
 
   if (!ok) {
-    console.log("La respuesta no fue ok");
     try {
       type ErrorEnvelope = {
         payload?: {
@@ -68,8 +58,6 @@ async function request<T>(
       message,
     };
 
-    //errorHandler(apiError);
-    // Re-lanzamos para que el caller pueda romper el flujo si quiere
     throw apiError;
   }
 

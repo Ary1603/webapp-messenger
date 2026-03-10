@@ -7,7 +7,6 @@ import { errorHandler, type ApiError } from "@/utils/error/errorHandler";
 import SearchInput from "@/components/inputs/SearchInput";
 import { useI18n } from "@/components/language/LanguageProvider";
 import ConversationSearchContent from "@/components/chats/ConversationSearchContent";
-//import type { SearchChatItem } from "@/types/components/search-chats-content";
 import { useRouter } from "next/navigation";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import ChatsSkeletonPage from "@/components/skeletons/page/ChatsSkeletonPage";
@@ -80,16 +79,12 @@ function ChatsPage() {
   };
 
   const handleSearchedSelectedChat = async (selectedItem: SearchedUserVM ) => {
-    const response = await getOrCreateDirectChatBetweenUsers({
+    await getOrCreateDirectChatBetweenUsers({
       userB_id: selectedItem.id
-    })
-    console.log("[handleSearchedSelectedChat] response: ", response);
-    //router.push(`/chats/123`);
-    //console.log("Seleccione un chat");
+    });
   };
 
   const handleOpenChat = (chat: any) => {
-    console.log("Se va abrir el chat: ", chat);
     router.push(`/chats/${chat.chat_id}`);
   };
 

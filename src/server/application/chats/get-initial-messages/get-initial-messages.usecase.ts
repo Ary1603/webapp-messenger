@@ -12,7 +12,6 @@ export class GetChatInitialMessagesUsecase {
     async execute(input: GetChatInitialMessagesUsecaseInput): Promise<UsecaseOutput<any, BackendErrorModel>> {
 
         if(!input.chatId) {
-            console.log("[GetChatInitialMessagesUsecase] if(!input.chatId) -> Entre a la validacion del chatId." );
             return {
                 success: false,
                 data: {

@@ -27,10 +27,7 @@ export class ChatInfraRepository implements ChatRepository {
       p_user_id: user_id,
     });
 
-    console.log("[ChatInfraRepository] getUserChats data: ", data);
-
     if (error) {
-      console.log("[ChatInfraRepository] getUserChats error: ", error);
       return {
         success: false,
         data: {
@@ -75,7 +72,6 @@ export class ChatInfraRepository implements ChatRepository {
   ): Promise<PortResult<any, PortError>> {
     const supabase = await createClient();
 
-    console.log("[getDirectChatWithUser] input -> ", input);
     const { data, error } = await supabase.rpc("get_direct_chat_with_user", {
       p_user_b: input.userB,
     });
@@ -89,7 +85,6 @@ export class ChatInfraRepository implements ChatRepository {
       };
     }
 
-    console.log("[getDirectChatWithUser] Infra data -> ", data);
     return {
       success: true,
       data,
@@ -153,15 +148,11 @@ export class ChatInfraRepository implements ChatRepository {
   ): Promise<PortResult<any, PortError>> {
     const supabase = await createClient();
 
-    console.log("[INFRA][getChatMessages] getChatMessages input: ", input);
     const { data, error } = await supabase.rpc("get_chat_messages", {
-      p_chat_id: input.chatId, //chatId,
-      p_limit: input.limit, //20,
-      p_cursor: input.cursor, //oldestMessage.created_at || null
+      p_chat_id: input.chatId,
+      p_limit: input.limit,
+      p_cursor: input.cursor,
     });
-
-    console.log("[INFRA][getChatMessages] getChatMessages data: ", data);
-    console.log("[INFRA][getChatMessages] getChatMessages error: ", error);
 
     if (error) {
       return {

@@ -25,8 +25,6 @@ export function mapSupabaseAuthError(
     return AuthInfraError.UNEXPECTED_ERROR;
   }
 
-  console.log(" ------- supabase-auth-error.mapper.ts ------- ");
-  console.log(error.code);
   return (
     SUPABASE_AUTH_ERROR_MAP[error.code] ??
     AuthInfraError.UNEXPECTED_ERROR

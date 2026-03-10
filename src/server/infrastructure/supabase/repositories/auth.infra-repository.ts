@@ -23,10 +23,7 @@ export class AuthInfraRepository implements AuthRepository {
       password,
     });
 
-    
-
     if (error) {
-      console.log("Hubo un error: ", error);
       return {
         success: false,
         data: {
@@ -45,9 +42,6 @@ export class AuthInfraRepository implements AuthRepository {
         },
       };
     }
-
-    console.log("auth.infra-repository.ts");
-    console.log("response: ", data);
 
     return {
       success: true,

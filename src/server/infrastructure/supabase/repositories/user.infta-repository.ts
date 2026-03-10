@@ -29,8 +29,6 @@ export class UserInfraRepository implements UserRepository {
       };
     }
 
-    console.log("Data from 'supabase-user.repository.ts: ", data);
-
     return {
       success: true,
       data: {

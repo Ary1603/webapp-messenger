@@ -30,7 +30,6 @@ export default function LoginPage() {
       await initLogin(payload);
       router.push("/chats");
     } catch (error) {
-      console.log("Entre al catch -> ", error);
       errorHandler(error as ApiError);
     } finally {
       setLoading(false)
@@ -68,7 +67,6 @@ export default function LoginPage() {
           preText={messages.hasnt_account_link.pre_text}
           linkText={messages.hasnt_account_link.text_link}
           href="/register"
-          // targetBlank // <- actívalo si necesitas abrir en otra pestaña
           className="text-center"
           linkClassName="ms-1"
         />

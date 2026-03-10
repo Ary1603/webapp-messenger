@@ -18,8 +18,6 @@ export async function POST(request: NextRequest) {
 
     const response = await usecase.execute(body);
 
-    console.log("Response del usecase en el route: ", response);
-
     if (!response.success) {
       const errors = [];
       errors.push(response.data.errorCode);
