@@ -1,0 +1,7 @@
+{
+    "CORE-1000": "Se ha producido un error inesperado. Inténtalo de nuevo más tarde.",
+    "CORE-1001": "Campos del formulario incorrectos.",
+    "CORE-1003": "Prueba de error del body",
+    "AUTH-1023": "Verifique el correo o contraseña ingresados",
+    "AUTH-1077": "Ya existe correo o usuario"
+}
